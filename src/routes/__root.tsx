@@ -72,18 +72,24 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   );
 }
 
+const GA_ID = (import.meta.env.VITE_GA_MEASUREMENT_ID as string | undefined) ?? "";
+
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   head: () => ({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "QianTron — Premium Machinery. Seamless Logistics. Delivered." },
+      { title: "QianTron — Global Sourcing & Machinery Delivery Across Africa" },
       { name: "description", content: "Africa's premier heavy equipment sourcing, logistics and machinery delivery partner. Global sourcing, RoRo shipping, port clearance and doorstep delivery." },
       { name: "author", content: "QianTron" },
-      { property: "og:title", content: "QianTron — Premium Machinery. Seamless Logistics." },
+      { name: "keywords", content: "heavy machinery, excavators, bulldozers, wheel loaders, prime movers, global sourcing, Africa logistics, RoRo shipping, Mombasa port, QianTron" },
+      { property: "og:site_name", content: "QianTron" },
+      { property: "og:title", content: "QianTron — Global Sourcing. Machinery Delivered." },
       { property: "og:description", content: "Africa's premier heavy equipment sourcing and delivery partner." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:site", content: "@qiantron" },
+      { name: "theme-color", content: "#B71C1C" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -92,9 +98,23 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800;900&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Orbitron:wght@700;800;900&display=swap",
       },
     ],
+    scripts: GA_ID
+      ? [
+          { src: `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`, async: true },
+          {
+            children: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_ID}',{send_page_view:true});window.__gt=gtag;`,
+          },
+        ]
+      : [
+          // Lightweight built-in pageview beacon: logs to console + dispatches an
+          // event listeners can hook into. Replace by setting VITE_GA_MEASUREMENT_ID.
+          {
+            children: `(function(){function track(){try{var p=location.pathname+location.search;window.dispatchEvent(new CustomEvent('qt:pageview',{detail:{path:p,ts:Date.now()}}));if(window.console&&console.debug)console.debug('[qt:pageview]',p);}catch(e){}}track();var _ps=history.pushState;history.pushState=function(){_ps.apply(this,arguments);track();};window.addEventListener('popstate',track);})();`,
+          },
+        ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
