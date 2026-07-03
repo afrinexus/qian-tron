@@ -4,6 +4,7 @@ import jcb from "@/assets/jcb.jpg.asset.json";
 import { CATEGORIES } from "@/lib/site";
 import { SiteNav, SiteFooter } from "@/components/SiteChrome";
 import { QianTronWordmark } from "@/components/QianTronWordmark";
+import { SquareCanvas } from "@/components/SquareCanvas";
 
 const TITLE = "QianTron — Global Sourcing & Machinery Delivery Across Africa";
 const DESC =
