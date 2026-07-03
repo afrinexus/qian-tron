@@ -17,6 +17,14 @@ export const CONTACT = {
   sourcing: "Global Sourcing · Shanghai · Guangzhou · Rotterdam",
 };
 
+export type Machine = {
+  code: string;
+  name: string;
+  image: string;
+  tag: string;
+  specs: { k: string; v: string }[];
+};
+
 export type Category = {
   slug: string;
   name: string;
@@ -27,6 +35,7 @@ export type Category = {
   intro: string;
   highlights: { k: string; v: string }[];
   applications: string[];
+  machines: Machine[];
 };
 
 export const CATEGORIES: Category[] = [
