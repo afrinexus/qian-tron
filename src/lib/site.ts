@@ -54,6 +54,14 @@ export const CATEGORIES: Category[] = [
       { k: "24 mo", v: "Powertrain warranty" },
     ],
     applications: ["Civil earthworks", "Open-pit mining", "Trenching & utilities", "Demolition"],
+    machines: [
+      { code: "EX-220", name: "JCB 220X LC", image: jcb.url, tag: "Civil · 22T",
+        specs: [{ k: "22T", v: "Weight" }, { k: "128 kW", v: "Power" }, { k: "1.2 m³", v: "Bucket" }] },
+      { code: "EX-380", name: "Hyundai HX380L", image: hyundai.url, tag: "Quarry · 38T",
+        specs: [{ k: "38T", v: "Weight" }, { k: "202 kW", v: "Power" }, { k: "1.9 m³", v: "Bucket" }] },
+      { code: "EX-950", name: "Cat 395 Mining", image: catBlack.url, tag: "Mining · 95T",
+        specs: [{ k: "95T", v: "Weight" }, { k: "404 kW", v: "Power" }, { k: "4.6 m³", v: "Bucket" }] },
+    ],
   },
   {
     slug: "bulldozers",
@@ -70,6 +78,14 @@ export const CATEGORIES: Category[] = [
       { k: "Ripper", v: "Optional 3-shank" },
     ],
     applications: ["Road formation", "Mine haul roads", "Land clearance", "Stockpile management"],
+    machines: [
+      { code: "BD-D6", name: "Cat D6 XE", image: catBlack.url, tag: "Civil · D6",
+        specs: [{ k: "23T", v: "Weight" }, { k: "159 kW", v: "Power" }, { k: "3.9 m³", v: "Blade" }] },
+      { code: "BD-D8", name: "Komatsu D85EX-18", image: komatsu.url, tag: "Mine road · D8",
+        specs: [{ k: "28T", v: "Weight" }, { k: "198 kW", v: "Power" }, { k: "5.9 m³", v: "Blade" }] },
+      { code: "BD-D11", name: "Cat D11 Mining", image: factory.url, tag: "Mining · D11",
+        specs: [{ k: "104T", v: "Weight" }, { k: "634 kW", v: "Power" }, { k: "34.4 m³", v: "Blade" }] },
+    ],
   },
   {
     slug: "wheel-loaders",
@@ -86,6 +102,14 @@ export const CATEGORIES: Category[] = [
       { k: "20T+", v: "Payload class" },
     ],
     applications: ["Quarry loading", "Bulk material handling", "Ports & logistics", "Recycling"],
+    machines: [
+      { code: "WL-HL960", name: "Hyundai HL960A", image: hyundai.url, tag: "Yard · 18T",
+        specs: [{ k: "18T", v: "Weight" }, { k: "3.4 m³", v: "Bucket" }, { k: "186 kW", v: "Power" }] },
+      { code: "WL-L120", name: "Volvo L120H", image: volvo.url, tag: "Quarry · 20T",
+        specs: [{ k: "20T", v: "Weight" }, { k: "4.2 m³", v: "Bucket" }, { k: "228 kW", v: "Power" }] },
+      { code: "WL-437", name: "JCB 437 HT", image: jcb.url, tag: "Ports · 17T",
+        specs: [{ k: "17T", v: "Weight" }, { k: "3.2 m³", v: "Bucket" }, { k: "160 kW", v: "Power" }] },
+    ],
   },
   {
     slug: "motor-graders",
@@ -102,6 +126,14 @@ export const CATEGORIES: Category[] = [
       { k: "GPS", v: "Grade control ready" },
     ],
     applications: ["Highway construction", "Road maintenance", "Airfield grading", "Mine road finishing"],
+    machines: [
+      { code: "GR-G940", name: "Volvo G940B", image: volvo.url, tag: "Highway · 14ft",
+        specs: [{ k: "18T", v: "Weight" }, { k: "14 ft", v: "Blade" }, { k: "186 kW", v: "Power" }] },
+      { code: "GR-160M", name: "Cat 160M3 AWD", image: catBlack.url, tag: "Airfield · 16ft",
+        specs: [{ k: "21T", v: "Weight" }, { k: "16 ft", v: "Blade" }, { k: "179 kW", v: "Power" }] },
+      { code: "GR-GD675", name: "Komatsu GD675-6", image: factory.url, tag: "Mine road · 14ft",
+        specs: [{ k: "17T", v: "Weight" }, { k: "14 ft", v: "Blade" }, { k: "165 kW", v: "Power" }] },
+    ],
   },
   {
     slug: "compaction-rollers",
@@ -118,6 +150,14 @@ export const CATEGORIES: Category[] = [
       { k: "Water", v: "1200L sprinkler" },
     ],
     applications: ["Asphalt paving", "Sub-base compaction", "Landfill", "Airport works"],
+    machines: [
+      { code: "CR-SD115", name: "Komatsu JV100WA", image: komatsu.url, tag: "Soil · 11T",
+        specs: [{ k: "11T", v: "Weight" }, { k: "30 Hz", v: "Vibration" }, { k: "82 kW", v: "Power" }] },
+      { code: "CR-DD120", name: "Volvo DD120C", image: volvo.url, tag: "Asphalt · 12T",
+        specs: [{ k: "12T", v: "Weight" }, { k: "Tandem", v: "Drum" }, { k: "97 kW", v: "Power" }] },
+      { code: "CR-SD26", name: "Cat CS78B", image: factory.url, tag: "Landfill · 26T",
+        specs: [{ k: "26T", v: "Weight" }, { k: "Pad", v: "Drum" }, { k: "194 kW", v: "Power" }] },
+    ],
   },
   {
     slug: "industrial-forklifts",
@@ -134,6 +174,14 @@ export const CATEGORIES: Category[] = [
       { k: "Cab", v: "Climate controlled" },
     ],
     applications: ["Warehousing", "Container yards", "Manufacturing", "Cold chain"],
+    machines: [
+      { code: "FL-30D", name: "Hyundai 30D-9", image: hyundai.url, tag: "Warehouse · 3T",
+        specs: [{ k: "3T", v: "Lift" }, { k: "4.5 m", v: "Mast" }, { k: "Diesel", v: "Fuel" }] },
+      { code: "FL-160D", name: "QT Heavy 160D", image: crane.url, tag: "Yard · 16T",
+        specs: [{ k: "16T", v: "Lift" }, { k: "6 m", v: "Mast" }, { k: "Diesel", v: "Fuel" }] },
+      { code: "FL-450R", name: "Reach Stacker 45T", image: truckBlue.url, tag: "Container · 45T",
+        specs: [{ k: "45T", v: "Lift" }, { k: "3-high", v: "Stack" }, { k: "246 kW", v: "Power" }] },
+    ],
   },
   {
     slug: "prime-movers",
@@ -150,6 +198,14 @@ export const CATEGORIES: Category[] = [
       { k: "Euro V", v: "Emissions ready" },
     ],
     applications: ["Long-haul freight", "Bulk mining logistics", "Container drayage", "Abnormal loads"],
+    machines: [
+      { code: "PM-FH16", name: "Volvo FH16 700", image: truckBlue.url, tag: "Prime · 6x4",
+        specs: [{ k: "700 HP", v: "Power" }, { k: "70T", v: "GCW" }, { k: "Euro V", v: "Emissions" }] },
+      { code: "PM-ACT", name: "Mercedes Actros 3363", image: truckRed.url, tag: "Corridor · 6x4",
+        specs: [{ k: "630 HP", v: "Power" }, { k: "60T", v: "GCW" }, { k: "PowerShift", v: "Trans" }] },
+      { code: "PM-777", name: "Cat 777G Haul", image: catBlack.url, tag: "Mining · 100T",
+        specs: [{ k: "100T", v: "Payload" }, { k: "751 kW", v: "Power" }, { k: "Rigid", v: "Chassis" }] },
+    ],
   },
 ];
 
