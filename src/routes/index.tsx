@@ -73,8 +73,9 @@ function Home() {
 
       {/* ============ Hero ============ */}
       <section className="relative min-h-screen w-full overflow-hidden bg-charcoal text-arch-white">
-        <img src={HERO_URL} alt="Premium heavy machinery" className="absolute inset-0 h-full w-full object-cover opacity-60" />
-        <div className="absolute inset-0 bg-gradient-to-b from-charcoal/60 via-charcoal/40 to-charcoal" />
+        <img src={HERO_URL} alt="Premium heavy machinery" className="absolute inset-0 h-full w-full object-cover opacity-50" />
+        <div className="absolute inset-0 bg-gradient-to-b from-charcoal/70 via-charcoal/50 to-charcoal" />
+        <SquareCanvas className="pointer-events-none absolute inset-0 h-full w-full" />
         <div className="absolute inset-0 bg-gradient-to-r from-charcoal/80 via-transparent to-charcoal/30" />
 
         <div className="relative mx-auto flex min-h-screen max-w-[1400px] flex-col justify-between px-6 pt-28 pb-14 md:px-10">
