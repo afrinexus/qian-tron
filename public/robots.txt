@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://qian-tron.lovable.app/sitemap.xml
