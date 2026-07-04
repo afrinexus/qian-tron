@@ -191,8 +191,10 @@ function CategoryPage() {
 
           <div className="mt-14 grid grid-cols-1 gap-8 md:grid-cols-3">
             {c.machines.map((m, idx) => (
-              <article
+              <Link
                 key={m.code}
+                to="/category/$slug/$machine"
+                params={{ slug: c.slug, machine: m.code.toLowerCase() }}
                 className="group relative flex flex-col overflow-hidden border border-border bg-arch-white transition hover:border-dragon"
               >
                 <div className="relative aspect-[4/3] overflow-hidden bg-charcoal">
@@ -222,15 +224,12 @@ function CategoryPage() {
                       </div>
                     ))}
                   </div>
-                  <a
-                    href={`${CONTACT.emailHref}?subject=${encodeURIComponent(`Enquiry: ${m.name} (${m.code})`)}`}
-                    className="mt-6 flex items-center justify-between border-t border-border pt-4 text-[11px] font-bold uppercase tracking-[0.3em] text-charcoal transition group-hover:text-dragon"
-                  >
-                    <span>Request Specification</span>
+                  <div className="mt-6 flex items-center justify-between border-t border-border pt-4 text-[11px] font-bold uppercase tracking-[0.3em] text-charcoal transition group-hover:text-dragon">
+                    <span>View Specification</span>
                     <span className="text-lg transition group-hover:translate-x-1">→</span>
-                  </a>
+                  </div>
                 </div>
-              </article>
+              </Link>
             ))}
           </div>
         </div>
