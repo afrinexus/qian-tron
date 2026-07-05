@@ -87,7 +87,7 @@ function Home() {
           <div className="max-w-5xl">
             <div className="section-eyebrow !text-dragon">Global Sourcing · Africa Delivery</div>
             <div className="mt-6 w-full text-arch-white">
-              <QianTronWordmark className="w-full h-auto" accent="var(--dragon)" />
+              <QianTronWordmark className="w-full h-auto" />
             </div>
             <p className="text-editorial mt-8 max-w-2xl text-xl text-arch-white/85 md:text-2xl">
               Premium Machinery. Seamless Logistics.<br />

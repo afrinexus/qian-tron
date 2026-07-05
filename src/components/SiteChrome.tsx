@@ -36,7 +36,7 @@ export function SiteFooter() {
         <div className="flex flex-col items-center text-center">
           <img src={logo.url} alt="QianTron" className="h-24 w-24 object-contain drop-shadow-[0_0_40px_rgba(183,28,28,0.4)]" />
           <div className="mt-8 w-full max-w-2xl">
-            <QianTronWordmark className="w-full h-auto text-arch-white" accent="var(--dragon)" />
+            <QianTronWordmark className="w-full h-auto" />
           </div>
           <div className="mt-6 h-[1px] w-24 bg-dragon" />
           <p className="text-editorial mt-6 max-w-2xl text-xl leading-snug text-arch-white/85">
