@@ -2,11 +2,12 @@ import { createFileRoute } from "@tanstack/react-router";
 import { SiteNav, SiteFooter } from "@/components/SiteChrome";
 import { CATEGORIES, CONTACT } from "@/lib/site";
 import { useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { submitEnquiry } from "@/lib/enquiries.functions";
+import { toast } from "sonner";
 
 const TITLE = "Contact QianTron — Global Sourcing & Machinery Enquiries";
-const DESC = `Reach QianTron for machinery sourcing, freight and delivery. Email ${
-  "info@qiantron.lucene.co"
-} · Phone +2547-2775-0097.`;
+const DESC = `Reach QianTron for machinery sourcing, freight and delivery. Email info@qiantron.lucene.co · Phone +2547-2775-0097.`;
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -28,7 +29,14 @@ export const Route = createFileRoute("/contact")({
         email: CONTACT.email,
         telephone: CONTACT.phone,
         areaServed: "Africa",
-        description: "Africa's premier heavy equipment sourcing, logistics and machinery delivery partner.",
+        contactPoint: {
+          "@type": "ContactPoint",
+          telephone: CONTACT.phone,
+          email: CONTACT.email,
+          contactType: "sales",
+          areaServed: "Africa",
+          availableLanguage: ["English"],
+        },
       }),
     }],
   }),
@@ -40,18 +48,37 @@ function ContactPage() {
   const [message, setMessage] = useState("");
   const [name, setName] = useState("");
   const [company, setCompany] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
+  const submit = useServerFn(submitEnquiry);
 
-  const mailto = () => {
-    const cat = CATEGORIES.find((c) => c.slug === category)?.name ?? "General";
-    const subject = `Enquiry: ${cat}`;
-    const body = `Name: ${name}\nCompany: ${company}\nInterested in: ${cat}\n\n${message}`;
-    return `${CONTACT.emailHref}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  };
+  const cat = CATEGORIES.find((c) => c.slug === category);
+
+  async function onSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setSending(true);
+    try {
+      await submit({
+        data: {
+          name, email, phone, company, message,
+          category_slug: category,
+          machine_name: cat?.name ?? "",
+        } as never,
+      });
+      setSent(true);
+      toast.success("Enquiry received — we'll reply within one business day.");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Failed to send enquiry.");
+    } finally {
+      setSending(false);
+    }
+  }
 
   return (
     <main className="min-h-screen bg-arch-white">
       <SiteNav />
-
       <section className="bg-charcoal py-32 pt-40 text-arch-white">
         <div className="mx-auto max-w-[1400px] px-6 md:px-10">
           <div className="section-eyebrow !text-dragon">Get in Touch</div>
@@ -69,15 +96,11 @@ function ContactPage() {
           <div className="md:col-span-5 space-y-10">
             <div>
               <div className="section-eyebrow">Email</div>
-              <a href={CONTACT.emailHref} className="text-display mt-3 block text-2xl font-bold hover:text-dragon transition">
-                {CONTACT.email}
-              </a>
+              <a href={CONTACT.emailHref} className="text-display mt-3 block text-2xl font-bold hover:text-dragon transition">{CONTACT.email}</a>
             </div>
             <div>
               <div className="section-eyebrow">Phone</div>
-              <a href={CONTACT.phoneHref} className="text-display mt-3 block text-2xl font-bold hover:text-dragon transition">
-                {CONTACT.phone}
-              </a>
+              <a href={CONTACT.phoneHref} className="text-display mt-3 block text-2xl font-bold hover:text-dragon transition">{CONTACT.phone}</a>
             </div>
             <div>
               <div className="section-eyebrow">Head Office</div>
@@ -92,70 +115,57 @@ function ContactPage() {
             </div>
           </div>
 
-          <form
-            className="md:col-span-7 border border-border bg-concrete p-8"
-            onSubmit={(e) => {
-              e.preventDefault();
-              window.location.href = mailto();
-            }}
-          >
-            <div className="section-eyebrow">Request a Quote</div>
-            <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
-              <label className="block">
-                <span className="text-[11px] uppercase tracking-[0.25em] text-steel">Name</span>
-                <input
-                  required
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="mt-2 block w-full border border-border bg-arch-white px-4 py-3 text-[14px] focus:border-dragon focus:outline-none"
-                />
-              </label>
-              <label className="block">
-                <span className="text-[11px] uppercase tracking-[0.25em] text-steel">Company</span>
-                <input
-                  value={company}
-                  onChange={(e) => setCompany(e.target.value)}
-                  className="mt-2 block w-full border border-border bg-arch-white px-4 py-3 text-[14px] focus:border-dragon focus:outline-none"
-                />
-              </label>
+          {sent ? (
+            <div className="md:col-span-7 flex flex-col items-start border border-dragon/30 bg-concrete p-10">
+              <div className="section-eyebrow !text-dragon">Received</div>
+              <div className="text-display mt-4 text-3xl font-black">Thank you, {name || "—"}.</div>
+              <p className="mt-4 text-graphite">
+                Your enquiry has been logged. Our trade desk will respond to <span className="font-bold">{email}</span> within one business day.
+              </p>
+              <button onClick={() => { setSent(false); setName(""); setEmail(""); setMessage(""); setPhone(""); setCompany(""); }} className="mt-8 border border-dragon px-5 py-3 text-[11px] uppercase tracking-[0.3em]">
+                Send another
+              </button>
             </div>
-            <label className="mt-6 block">
-              <span className="text-[11px] uppercase tracking-[0.25em] text-steel">Interested in</span>
-              <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="mt-2 block w-full border border-border bg-arch-white px-4 py-3 text-[14px] focus:border-dragon focus:outline-none"
-              >
-                {CATEGORIES.map((c) => (
-                  <option key={c.slug} value={c.slug}>{c.name}</option>
-                ))}
-                <option value="other">Other / General enquiry</option>
-              </select>
-            </label>
-            <label className="mt-6 block">
-              <span className="text-[11px] uppercase tracking-[0.25em] text-steel">Message</span>
-              <textarea
-                rows={5}
-                required
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                placeholder="Volume, delivery site, preferred spec, timing…"
-                className="mt-2 block w-full border border-border bg-arch-white px-4 py-3 text-[14px] focus:border-dragon focus:outline-none"
-              />
-            </label>
-            <button
-              type="submit"
-              className="mt-8 w-full bg-dragon px-6 py-4 text-[12px] font-bold uppercase tracking-[0.3em] text-arch-white hover:bg-dragon-deep transition"
-            >
-              Send Enquiry
-            </button>
-            <p className="mt-3 text-center text-[11px] text-steel">
-              Opens your email client · we respond within 1 business day.
-            </p>
-          </form>
+          ) : (
+            <form className="md:col-span-7 border border-border bg-concrete p-8" onSubmit={onSubmit}>
+              <div className="section-eyebrow">Request a Quote</div>
+              <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
+                <label className="block">
+                  <span className="text-[11px] uppercase tracking-[0.25em] text-steel">Name</span>
+                  <input required maxLength={120} value={name} onChange={(e) => setName(e.target.value)} className="mt-2 block w-full border border-border bg-arch-white px-4 py-3 text-[14px] focus:border-dragon focus:outline-none" />
+                </label>
+                <label className="block">
+                  <span className="text-[11px] uppercase tracking-[0.25em] text-steel">Email</span>
+                  <input type="email" required maxLength={255} value={email} onChange={(e) => setEmail(e.target.value)} className="mt-2 block w-full border border-border bg-arch-white px-4 py-3 text-[14px] focus:border-dragon focus:outline-none" />
+                </label>
+                <label className="block">
+                  <span className="text-[11px] uppercase tracking-[0.25em] text-steel">Company</span>
+                  <input maxLength={160} value={company} onChange={(e) => setCompany(e.target.value)} className="mt-2 block w-full border border-border bg-arch-white px-4 py-3 text-[14px] focus:border-dragon focus:outline-none" />
+                </label>
+                <label className="block">
+                  <span className="text-[11px] uppercase tracking-[0.25em] text-steel">Phone</span>
+                  <input maxLength={50} value={phone} onChange={(e) => setPhone(e.target.value)} className="mt-2 block w-full border border-border bg-arch-white px-4 py-3 text-[14px] focus:border-dragon focus:outline-none" />
+                </label>
+              </div>
+              <label className="mt-6 block">
+                <span className="text-[11px] uppercase tracking-[0.25em] text-steel">Interested in</span>
+                <select value={category} onChange={(e) => setCategory(e.target.value)} className="mt-2 block w-full border border-border bg-arch-white px-4 py-3 text-[14px] focus:border-dragon focus:outline-none">
+                  {CATEGORIES.map((c) => (<option key={c.slug} value={c.slug}>{c.name}</option>))}
+                  <option value="other">Other / General enquiry</option>
+                </select>
+              </label>
+              <label className="mt-6 block">
+                <span className="text-[11px] uppercase tracking-[0.25em] text-steel">Message</span>
+                <textarea rows={5} required maxLength={2000} value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Volume, delivery site, preferred spec, timing…" className="mt-2 block w-full border border-border bg-arch-white px-4 py-3 text-[14px] focus:border-dragon focus:outline-none" />
+              </label>
+              <button type="submit" disabled={sending} className="mt-8 w-full bg-dragon px-6 py-4 text-[12px] font-bold uppercase tracking-[0.3em] text-arch-white hover:bg-dragon-deep transition disabled:opacity-60">
+                {sending ? "Sending…" : "Send Enquiry"}
+              </button>
+              <p className="mt-3 text-center text-[11px] text-steel">Secured by Lovable Cloud · we respond within 1 business day.</p>
+            </form>
+          )}
         </div>
       </section>
-
       <SiteFooter />
     </main>
   );
