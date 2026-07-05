@@ -58,7 +58,7 @@ function MachineryCMS() {
       <div className="mt-10 space-y-10">
         {data.categories.map((c) => {
           const cat = c as Category;
-          const machines = data.machines.filter((m) => m.category_id === cat.id) as Machine[];
+          const machines = data.machines.filter((m) => m.category_id === cat.id).map((m) => ({ ...m, specs: (m.specs as unknown as { k: string; v: string }[]) ?? [] })) as Machine[];
           return (
             <section key={cat.id} className="border border-border bg-arch-white">
               <header className="flex items-center justify-between border-b border-border p-5">
