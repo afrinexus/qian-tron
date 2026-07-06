@@ -150,14 +150,30 @@ function MachinePage() {
     `Hello QianTron,\n\nI would like a full specification and quote for:\n\n  ${m.name} (${m.code})\n  Category: ${c.name}\n  Configuration: ${m.tag}\n\nPlease include lead time, RoRo/container options and doorstep commissioning terms.\n\nThank you.`,
   )}`;
 
-  const extendedSpecs = [
-    ...m.specs.map((s) => ({ k: s.v, v: s.k })),
-    { k: "Model Code", v: m.code },
-    { k: "Configuration", v: m.tag },
-    { k: "Series", v: `${c.ref} · ${c.name}` },
-    { k: "Origin", v: "EU · Japan · China Tier-1" },
-    { k: "Shipping", v: "RoRo · Container · Break-bulk" },
-    { k: "Warranty", v: "24-month powertrain" },
+  const specGroups: { title: string; eyebrow: string; items: { k: string; v: string }[] }[] = [
+    {
+      eyebrow: "Group A",
+      title: "Performance",
+      items: m.specs.map((s) => ({ k: s.v, v: s.k })),
+    },
+    {
+      eyebrow: "Group B",
+      title: "Identity",
+      items: [
+        { k: "Model Code", v: m.code },
+        { k: "Configuration", v: m.tag },
+        { k: "Series", v: `${c.ref} · ${c.name}` },
+      ],
+    },
+    {
+      eyebrow: "Group C",
+      title: "Sourcing & Delivery",
+      items: [
+        { k: "Origin", v: "EU · Japan · China Tier-1" },
+        { k: "Shipping", v: "RoRo · Container · Break-bulk" },
+        { k: "Warranty", v: "24-month powertrain" },
+      ],
+    },
   ];
 
   return (
