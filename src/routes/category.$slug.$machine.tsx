@@ -3,6 +3,7 @@ import { CONTACT, machineByCode } from "@/lib/site";
 import type { Category, Machine } from "@/lib/site";
 import { SiteNav, SiteFooter } from "@/components/SiteChrome";
 import { SquareCanvas } from "@/components/SquareCanvas";
+import { FabricPattern } from "@/components/FabricPattern";
 
 const BASE_URL = "https://qian-tron.lovable.app";
 
@@ -216,8 +217,12 @@ function MachinePage() {
       </section>
 
       {/* Overview + hero image */}
-      <section className="bg-arch-white py-24 text-charcoal">
-        <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-12 px-6 md:grid-cols-12 md:px-10">
+      <section className="relative overflow-hidden bg-arch-white py-24 text-charcoal">
+        <FabricPattern
+          className="absolute -bottom-16 -right-20 h-[440px] w-[440px]"
+          tone="gold" corner="br" rings={32} spacing={16} opacity={0.14} motion="drift" duration={28}
+        />
+        <div className="relative mx-auto grid max-w-[1400px] grid-cols-1 gap-12 px-6 md:grid-cols-12 md:px-10">
           <div className="md:col-span-7">
             <div className="relative aspect-[4/3] overflow-hidden border border-border bg-concrete">
               <img src={m.image} alt={m.name} className="h-full w-full object-cover" />

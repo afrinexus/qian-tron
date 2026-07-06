@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteNav, SiteFooter } from "@/components/SiteChrome";
+import { FabricPattern } from "@/components/FabricPattern";
 import { CATEGORIES, CONTACT } from "@/lib/site";
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
@@ -79,8 +80,12 @@ function ContactPage() {
   return (
     <main className="min-h-screen bg-arch-white">
       <SiteNav />
-      <section className="bg-charcoal py-32 pt-40 text-arch-white">
-        <div className="mx-auto max-w-[1400px] px-6 md:px-10">
+      <section className="relative overflow-hidden bg-charcoal py-32 pt-40 text-arch-white">
+        <FabricPattern
+          className="absolute -bottom-24 -right-24 h-[560px] w-[560px]"
+          tone="dragon" corner="br" rings={42} spacing={15} opacity={0.13} motion="drift" duration={34}
+        />
+        <div className="relative mx-auto max-w-[1400px] px-6 md:px-10">
           <div className="section-eyebrow !text-dragon">Get in Touch</div>
           <h1 className="text-display mt-4 text-5xl font-black leading-[0.9] md:text-7xl">
             Specify your <span className="text-dragon">consignment.</span>

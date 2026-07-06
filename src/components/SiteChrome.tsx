@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { FabricPattern } from "@/components/FabricPattern";
 import logoAsset from "@/assets/logo-new.png.asset.json";
 import { toAbsoluteUrl } from "@/lib/site";
 const logo = { url: toAbsoluteUrl(logoAsset.url) };
@@ -43,8 +44,12 @@ export function SiteNav() {
 
 export function SiteFooter() {
   return (
-    <footer id="contact" className="relative bg-graphite text-arch-white">
-      <div className="mx-auto max-w-[1400px] px-6 py-24 md:px-10">
+    <footer id="contact" className="relative overflow-hidden bg-graphite text-arch-white">
+      <FabricPattern
+        className="absolute -bottom-24 -right-24 h-[520px] w-[520px]"
+        tone="arch" corner="br" rings={40} spacing={16} opacity={0.09} motion="drift" duration={38}
+      />
+      <div className="relative mx-auto max-w-[1400px] px-6 py-24 md:px-10">
         <div className="flex flex-col items-center text-center">
           <img src={logo.url} alt="QianTron" className="h-24 w-24 object-contain drop-shadow-[0_0_40px_rgba(183,28,28,0.4)]" />
           <div className="mt-8 w-full max-w-2xl">
@@ -81,7 +86,7 @@ export function SiteFooter() {
 
         <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-arch-white/10 pt-8 text-[10px] uppercase tracking-[0.3em] text-arch-white/40 md:flex-row">
           <div>© MMXXV QianTron · All Rights Reserved</div>
-          <div>Corporate Profile · Volume I</div>
+          <div>Volume I</div>
         </div>
       </div>
     </footer>

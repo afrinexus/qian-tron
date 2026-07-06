@@ -5,6 +5,7 @@ import { CATEGORIES, PUBLIC_ORIGIN, toAbsoluteUrl } from "@/lib/site";
 import { SiteNav, SiteFooter } from "@/components/SiteChrome";
 import { QianTronWordmark } from "@/components/QianTronWordmark";
 import { SquareCanvas } from "@/components/SquareCanvas";
+import { FabricPattern } from "@/components/FabricPattern";
 
 const logo = { url: toAbsoluteUrl(logoAsset.url) };
 const jcb = { url: toAbsoluteUrl(jcbAsset.url) };
@@ -84,7 +85,6 @@ function Home() {
         <div className="relative mx-auto flex min-h-screen max-w-[1400px] flex-col justify-between px-6 pt-28 pb-14 md:px-10">
           <div className="flex flex-col items-center text-center">
             <img src={logo.url} alt="QianTron dragon mark" className="h-28 w-28 object-contain drop-shadow-[0_0_30px_rgba(183,28,28,0.5)]" />
-            <div className="mt-4 text-[10px] tracking-[0.5em] text-arch-white/50 uppercase">Corporate Profile · MMXXV</div>
           </div>
 
           <div className="max-w-5xl">
@@ -114,8 +114,12 @@ function Home() {
       </section>
 
       {/* ============ Intro ============ */}
-      <section className="bg-arch-white py-24 text-charcoal">
-        <div className="mx-auto max-w-[1100px] px-6 text-center md:px-10">
+      <section className="relative overflow-hidden bg-arch-white py-24 text-charcoal">
+        <FabricPattern
+          className="absolute -bottom-16 -right-16 h-[420px] w-[420px]"
+          tone="bronze" corner="br" rings={30} spacing={18} opacity={0.16} motion="drift" duration={28}
+        />
+        <div className="relative mx-auto max-w-[1100px] px-6 text-center md:px-10">
           <div className="section-eyebrow">Who We Are</div>
           <p className="text-editorial mt-6 text-2xl leading-snug text-graphite md:text-4xl">
             A vertically integrated house for <span className="text-dragon">global machinery sourcing</span>, ocean logistics and inland delivery across Africa.
@@ -166,8 +170,12 @@ function Home() {
       </section>
 
       {/* ============ Services teaser ============ */}
-      <section className="bg-charcoal py-24 text-arch-white">
-        <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-10 px-6 md:grid-cols-12 md:px-10">
+      <section className="relative overflow-hidden bg-charcoal py-24 text-arch-white">
+        <FabricPattern
+          className="absolute -bottom-32 -right-32 h-[600px] w-[600px]"
+          tone="dragon" corner="br" rings={44} spacing={14} opacity={0.14} motion="breathe" duration={9}
+        />
+        <div className="relative mx-auto grid max-w-[1400px] grid-cols-1 gap-10 px-6 md:grid-cols-12 md:px-10">
           <div className="md:col-span-5">
             <div className="section-eyebrow !text-dragon">The Ecosystem</div>
             <h2 className="text-display mt-4 text-4xl font-black leading-[0.95] md:text-6xl">

@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteNav, SiteFooter } from "@/components/SiteChrome";
+import { FabricPattern } from "@/components/FabricPattern";
 import logoAsset from "@/assets/logo-new.png.asset.json";
 import volvoAsset from "@/assets/volvo.jpg.asset.json";
 import jcbAsset from "@/assets/jcb.jpg.asset.json";
@@ -48,8 +49,12 @@ function AboutPage() {
     <main className="min-h-screen bg-arch-white">
       <SiteNav />
 
-      <section className="relative bg-arch-white py-32 pt-40 text-charcoal">
-        <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-16 px-6 md:grid-cols-12 md:px-10">
+      <section className="relative overflow-hidden bg-arch-white py-32 pt-40 text-charcoal">
+        <FabricPattern
+          className="absolute -bottom-24 -right-20 h-[520px] w-[520px]"
+          tone="gold" corner="br" rings={38} spacing={16} opacity={0.14} motion="drift" duration={32}
+        />
+        <div className="relative mx-auto grid max-w-[1400px] grid-cols-1 gap-16 px-6 md:grid-cols-12 md:px-10">
           <div className="relative md:col-span-5">
             <img src={logo.url} alt="" className="absolute -left-8 top-0 h-[380px] w-[380px] object-contain opacity-[0.07]" />
             <div className="relative">
@@ -90,8 +95,12 @@ function AboutPage() {
         </div>
       </section>
 
-      <section className="bg-concrete py-24 bg-blueprint text-charcoal">
-        <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-12 px-6 md:grid-cols-3 md:px-10">
+      <section className="relative overflow-hidden bg-concrete py-24 bg-blueprint text-charcoal">
+        <FabricPattern
+          className="absolute -bottom-16 left-[-6rem] h-[400px] w-[400px]"
+          tone="bronze" corner="bl" rings={28} spacing={18} opacity={0.13} motion="breathe" duration={11}
+        />
+        <div className="relative mx-auto grid max-w-[1400px] grid-cols-1 gap-12 px-6 md:grid-cols-3 md:px-10">
           {[
             { h: "Mission", p: "To supply Africa's most ambitious builders with machinery, mobility and logistics excellence — delivered with the precision of a global trading house." },
             { h: "Vision", p: "To become the definitive machinery infrastructure partner across the African continent by 2030." },

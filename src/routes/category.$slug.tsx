@@ -3,6 +3,7 @@ import type { Category } from "@/lib/site";
 import { CATEGORIES, CONTACT, categoryBySlug } from "@/lib/site";
 import { SiteNav, SiteFooter } from "@/components/SiteChrome";
 import { SquareCanvas } from "@/components/SquareCanvas";
+import { FabricPattern } from "@/components/FabricPattern";
 
 export const Route = createFileRoute("/category/$slug")({
   loader: ({ params }) => {
@@ -127,8 +128,12 @@ function CategoryPage() {
       </section>
 
       {/* Polished Intro */}
-      <section className="bg-arch-white py-28 text-charcoal">
-        <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-16 px-6 md:grid-cols-12 md:px-10">
+      <section className="relative overflow-hidden bg-arch-white py-28 text-charcoal">
+        <FabricPattern
+          className="absolute -bottom-20 -right-16 h-[480px] w-[480px]"
+          tone="bronze" corner="br" rings={34} spacing={17} opacity={0.15} motion="drift" duration={30}
+        />
+        <div className="relative mx-auto grid max-w-[1400px] grid-cols-1 gap-16 px-6 md:grid-cols-12 md:px-10">
           <div className="md:col-span-4">
             <div className="section-eyebrow">Chapter I</div>
             <div className="text-display mt-3 text-5xl font-black leading-[0.95] md:text-6xl">
