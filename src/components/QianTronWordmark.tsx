@@ -1,4 +1,6 @@
-import wordmark from "@/assets/qiantron-wordmark.png.asset.json";
+import wordmarkAsset from "@/assets/qiantron-wordmark.png.asset.json";
+import { toAbsoluteUrl } from "@/lib/site";
+const wordmark = { url: toAbsoluteUrl(wordmarkAsset.url) };
 
 type Props = {
   className?: string;
