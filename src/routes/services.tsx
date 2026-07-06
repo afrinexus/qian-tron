@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteNav, SiteFooter } from "@/components/SiteChrome";
+import { FabricPattern } from "@/components/FabricPattern";
 import craneAsset from "@/assets/crane.jpg.asset.json";
 import factoryAsset from "@/assets/factory.jpg.asset.json";
 import { toAbsoluteUrl } from "@/lib/site";
@@ -92,8 +93,12 @@ function ServicesPage() {
         </div>
       </section>
 
-      <section className="bg-concrete py-24">
-        <div className="mx-auto max-w-[1400px] px-6 md:px-10">
+      <section className="relative overflow-hidden bg-concrete py-24">
+        <FabricPattern
+          className="absolute -bottom-20 -right-20 h-[460px] w-[460px]"
+          tone="steel" corner="br" rings={34} spacing={15} opacity={0.14} motion="drift" duration={30}
+        />
+        <div className="relative mx-auto max-w-[1400px] px-6 md:px-10">
           <div className="section-eyebrow">Port Clearance</div>
           <h2 className="text-display mt-3 text-4xl font-black md:text-5xl">Clearance, measured in <span className="text-dragon">hours.</span></h2>
           <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
@@ -138,8 +143,12 @@ function ServicesPage() {
         </div>
       </section>
 
-      <section className="bg-charcoal py-24 text-arch-white">
-        <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-12 px-6 md:grid-cols-12 md:px-10">
+      <section className="relative overflow-hidden bg-charcoal py-24 text-arch-white">
+        <FabricPattern
+          className="absolute bottom-[-4rem] left-[-4rem] h-[500px] w-[500px]"
+          tone="dragon" corner="bl" rings={40} spacing={14} opacity={0.13} motion="breathe" duration={10}
+        />
+        <div className="relative mx-auto grid max-w-[1400px] grid-cols-1 gap-12 px-6 md:grid-cols-12 md:px-10">
           <div className="md:col-span-5">
             <div className="section-eyebrow !text-dragon">RoRo Specialization</div>
             <h2 className="text-display mt-4 text-4xl font-black leading-[0.9] md:text-6xl">
