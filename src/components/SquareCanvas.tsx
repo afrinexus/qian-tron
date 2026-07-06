@@ -105,13 +105,14 @@ export function SquareCanvas({
       }
 
       tick++;
-      if (tick % 12 === 0 && pulses.length < 14) spawn();
+      // Reduced pulse frequency by ~3/4 (was every 12 frames, cap 14 → now every 48 frames, cap 4)
+      if (tick % 48 === 0 && pulses.length < 4) spawn();
 
       raf = requestAnimationFrame(draw);
     };
 
     resize();
-    for (let i = 0; i < 6; i++) spawn();
+    for (let i = 0; i < 2; i++) spawn();
     draw();
     const ro = new ResizeObserver(resize);
     ro.observe(canvas);
