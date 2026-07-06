@@ -1,12 +1,37 @@
-import jcb from "@/assets/jcb.jpg.asset.json";
-import factory from "@/assets/factory.jpg.asset.json";
-import hyundai from "@/assets/hyundai.jpg.asset.json";
-import volvo from "@/assets/volvo.jpg.asset.json";
-import komatsu from "@/assets/komatsu.jpg.asset.json";
-import crane from "@/assets/crane.jpg.asset.json";
-import truckBlue from "@/assets/truck-blue.jpg.asset.json";
-import truckRed from "@/assets/truck-red.jpg.asset.json";
-import catBlack from "@/assets/cat-black.jpg.asset.json";
+import jcbAsset from "@/assets/jcb.jpg.asset.json";
+import factoryAsset from "@/assets/factory.jpg.asset.json";
+import hyundaiAsset from "@/assets/hyundai.jpg.asset.json";
+import volvoAsset from "@/assets/volvo.jpg.asset.json";
+import komatsuAsset from "@/assets/komatsu.jpg.asset.json";
+import craneAsset from "@/assets/crane.jpg.asset.json";
+import truckBlueAsset from "@/assets/truck-blue.jpg.asset.json";
+import truckRedAsset from "@/assets/truck-red.jpg.asset.json";
+import catBlackAsset from "@/assets/cat-black.jpg.asset.json";
+
+/**
+ * Public origin used to promote CDN asset URLs to absolute, globally
+ * resolvable URLs — required for OG/Twitter cards, JSON-LD image fields,
+ * sitemap references, and any external crawler/social scraper that will
+ * not resolve site-relative paths.
+ */
+export const PUBLIC_ORIGIN = "https://qian-tron.lovable.app";
+
+export const toAbsoluteUrl = (path: string): string => {
+  if (!path) return path;
+  if (/^https?:\/\//i.test(path)) return path;
+  return `${PUBLIC_ORIGIN}${path.startsWith("/") ? "" : "/"}${path}`;
+};
+
+const abs = (a: { url: string }) => toAbsoluteUrl(a.url);
+const jcb = { url: abs(jcbAsset) };
+const factory = { url: abs(factoryAsset) };
+const hyundai = { url: abs(hyundaiAsset) };
+const volvo = { url: abs(volvoAsset) };
+const komatsu = { url: abs(komatsuAsset) };
+const crane = { url: abs(craneAsset) };
+const truckBlue = { url: abs(truckBlueAsset) };
+const truckRed = { url: abs(truckRedAsset) };
+const catBlack = { url: abs(catBlackAsset) };
 
 export const CONTACT = {
   phone: "+2547-2775-0097",
