@@ -5,6 +5,7 @@ import { CATEGORIES, PUBLIC_ORIGIN, toAbsoluteUrl } from "@/lib/site";
 import { SiteNav, SiteFooter } from "@/components/SiteChrome";
 import { QianTronWordmark } from "@/components/QianTronWordmark";
 import { SquareCanvas } from "@/components/SquareCanvas";
+import { FabricPattern } from "@/components/FabricPattern";
 
 const logo = { url: toAbsoluteUrl(logoAsset.url) };
 const jcb = { url: toAbsoluteUrl(jcbAsset.url) };
