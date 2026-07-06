@@ -50,7 +50,7 @@ export const Route = createFileRoute("/")({
           "@context": "https://schema.org",
           "@type": "WebSite",
           name: "QianTron",
-          url: "/",
+          url: HOME_URL,
           description: DESC,
           publisher: { "@type": "Organization", name: "QianTron" },
         }),
