@@ -1,7 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteNav, SiteFooter } from "@/components/SiteChrome";
-import crane from "@/assets/crane.jpg.asset.json";
-import factory from "@/assets/factory.jpg.asset.json";
+import craneAsset from "@/assets/crane.jpg.asset.json";
+import factoryAsset from "@/assets/factory.jpg.asset.json";
+import { toAbsoluteUrl } from "@/lib/site";
+const crane = { url: toAbsoluteUrl(craneAsset.url) };
+const factory = { url: toAbsoluteUrl(factoryAsset.url) };
 
 const TITLE = "Services — Global Sourcing, Ocean Logistics & Inland Delivery | QianTron";
 const DESC =
