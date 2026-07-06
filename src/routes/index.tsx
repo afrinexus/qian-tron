@@ -84,7 +84,6 @@ function Home() {
         <div className="relative mx-auto flex min-h-screen max-w-[1400px] flex-col justify-between px-6 pt-28 pb-14 md:px-10">
           <div className="flex flex-col items-center text-center">
             <img src={logo.url} alt="QianTron dragon mark" className="h-28 w-28 object-contain drop-shadow-[0_0_30px_rgba(183,28,28,0.5)]" />
-            <div className="mt-4 text-[10px] tracking-[0.5em] text-arch-white/50 uppercase">Corporate Profile · MMXXV</div>
           </div>
 
           <div className="max-w-5xl">
