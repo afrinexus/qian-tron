@@ -27,7 +27,7 @@ export function SiteNav() {
           <Link to="/" className="hover:text-dragon transition" activeProps={{ className: "text-dragon" }}>Home</Link>
           <Link to="/about" className="hover:text-dragon transition" activeProps={{ className: "text-dragon" }}>About</Link>
           <Link to="/services" className="hover:text-dragon transition" activeProps={{ className: "text-dragon" }}>Services</Link>
-          <Link to="/category/$slug" params={{ slug: "excavators" }} className="hover:text-dragon transition">Machinery</Link>
+          <Link to="/machinery" className="hover:text-dragon transition" activeProps={{ className: "text-dragon" }}>Machinery</Link>
           <Link to="/contact" className="hover:text-dragon transition" activeProps={{ className: "text-dragon" }}>Contact</Link>
           {signedIn && <Link to="/admin" className="text-dragon hover:underline">Admin</Link>}
         </div>
