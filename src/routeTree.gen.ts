@@ -17,6 +17,7 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ServicesIndexRouteImport } from './routes/services.index'
+import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
 import { Route as CategorySlugRouteImport } from './routes/category.$slug'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
@@ -63,6 +64,11 @@ const ServicesIndexRoute = ServicesIndexRouteImport.update({
   path: '/',
   getParentRoute: () => ServicesRoute,
 } as any)
+const ServicesSlugRoute = ServicesSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => ServicesRoute,
+} as any)
 const CategorySlugRoute = CategorySlugRouteImport.update({
   id: '/category/$slug',
   path: '/category/$slug',
@@ -105,6 +111,7 @@ export interface FileRoutesByFullPath {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/category/$slug': typeof CategorySlugRouteWithChildren
+  '/services/$slug': typeof ServicesSlugRoute
   '/services/': typeof ServicesIndexRoute
   '/admin/enquiries': typeof AuthenticatedAdminEnquiriesRoute
   '/admin/machinery': typeof AuthenticatedAdminMachineryRoute
@@ -118,6 +125,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/category/$slug': typeof CategorySlugRouteWithChildren
+  '/services/$slug': typeof ServicesSlugRoute
   '/services': typeof ServicesIndexRoute
   '/admin/enquiries': typeof AuthenticatedAdminEnquiriesRoute
   '/admin/machinery': typeof AuthenticatedAdminMachineryRoute
@@ -135,6 +143,7 @@ export interface FileRoutesById {
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/category/$slug': typeof CategorySlugRouteWithChildren
+  '/services/$slug': typeof ServicesSlugRoute
   '/services/': typeof ServicesIndexRoute
   '/_authenticated/admin/enquiries': typeof AuthenticatedAdminEnquiriesRoute
   '/_authenticated/admin/machinery': typeof AuthenticatedAdminMachineryRoute
@@ -152,6 +161,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/admin'
     | '/category/$slug'
+    | '/services/$slug'
     | '/services/'
     | '/admin/enquiries'
     | '/admin/machinery'
@@ -165,6 +175,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/sitemap.xml'
     | '/category/$slug'
+    | '/services/$slug'
     | '/services'
     | '/admin/enquiries'
     | '/admin/machinery'
@@ -181,6 +192,7 @@ export interface FileRouteTypes {
     | '/sitemap.xml'
     | '/_authenticated/admin'
     | '/category/$slug'
+    | '/services/$slug'
     | '/services/'
     | '/_authenticated/admin/enquiries'
     | '/_authenticated/admin/machinery'
@@ -257,6 +269,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicesIndexRouteImport
       parentRoute: typeof ServicesRoute
     }
+    '/services/$slug': {
+      id: '/services/$slug'
+      path: '/$slug'
+      fullPath: '/services/$slug'
+      preLoaderRoute: typeof ServicesSlugRouteImport
+      parentRoute: typeof ServicesRoute
+    }
     '/category/$slug': {
       id: '/category/$slug'
       path: '/category/$slug'
@@ -329,10 +348,12 @@ const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
 interface ServicesRouteChildren {
+  ServicesSlugRoute: typeof ServicesSlugRoute
   ServicesIndexRoute: typeof ServicesIndexRoute
 }
 
 const ServicesRouteChildren: ServicesRouteChildren = {
+  ServicesSlugRoute: ServicesSlugRoute,
   ServicesIndexRoute: ServicesIndexRoute,
 }
 
