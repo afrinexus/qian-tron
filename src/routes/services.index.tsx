@@ -11,7 +11,7 @@ const TITLE = "Services — Global Sourcing, Ocean Logistics & Inland Delivery |
 const DESC =
   "End-to-end machinery services: global sourcing, RoRo and container ocean freight, port clearance and inland delivery across Africa.";
 
-export const Route = createFileRoute("/services")({
+export const Route = createFileRoute("/services/")({
   head: () => ({
     meta: [
       { title: TITLE },
