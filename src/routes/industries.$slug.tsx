@@ -111,7 +111,7 @@ function IndustryDetail() {
           <h3 className="text-display mt-3 text-3xl font-black md:text-5xl">Machinery for {i.name.toLowerCase()}.</h3>
           <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
             {cats.map((c) => (
-              <Link key={c.slug} to="/category/$slug" params={{ slug: c.slug }}
+              <Link key={c.slug} to="/machinery/$type" params={{ type: c.slug }}
                 className="group relative overflow-hidden border border-border bg-arch-white transition hover:border-dragon">
                 <div className="relative aspect-[4/3] overflow-hidden bg-charcoal">
                   <img src={c.hero} alt={c.name} className="h-full w-full object-cover opacity-90 transition duration-700 group-hover:scale-105" />
@@ -123,11 +123,29 @@ function IndustryDetail() {
                   <div className="text-display text-xl font-black">{c.name}</div>
                   <div className="mt-2 text-[13px] text-steel">{c.tagline}</div>
                   <div className="mt-4 flex items-center justify-between border-t border-border pt-3 text-[11px] font-bold uppercase tracking-[0.3em] text-charcoal transition group-hover:text-dragon">
-                    <span>View Register</span><span>→</span>
+                    <span>Open {c.machines.length} Models</span><span>→</span>
                   </div>
                 </div>
               </Link>
             ))}
+          </div>
+
+          <div className="mt-10 border-t border-border pt-6">
+            <div className="section-eyebrow">Jump Straight To A Catalogue</div>
+            <div className="mt-4 flex flex-wrap gap-3">
+              {cats.flatMap((c) =>
+                c.machines.map((m) => (
+                  <Link
+                    key={`${c.slug}-${m.code}`}
+                    to="/category/$slug/$machine"
+                    params={{ slug: c.slug, machine: m.code.toLowerCase() }}
+                    className="border border-border bg-arch-white px-4 py-2 text-[10px] font-bold uppercase tracking-[0.25em] text-charcoal transition hover:border-dragon hover:text-dragon"
+                  >
+                    {m.code} · {m.name}
+                  </Link>
+                )),
+              )}
+            </div>
           </div>
         </div>
       </section>

@@ -18,7 +18,9 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ServicesIndexRouteImport } from './routes/services.index'
+import { Route as MachineryIndexRouteImport } from './routes/machinery.index'
 import { Route as ServicesSlugRouteImport } from './routes/services.$slug'
+import { Route as MachineryTypeRouteImport } from './routes/machinery.$type'
 import { Route as IndustriesSlugRouteImport } from './routes/industries.$slug'
 import { Route as CategorySlugRouteImport } from './routes/category.$slug'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
@@ -71,10 +73,20 @@ const ServicesIndexRoute = ServicesIndexRouteImport.update({
   path: '/',
   getParentRoute: () => ServicesRoute,
 } as any)
+const MachineryIndexRoute = MachineryIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => MachineryRoute,
+} as any)
 const ServicesSlugRoute = ServicesSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => ServicesRoute,
+} as any)
+const MachineryTypeRoute = MachineryTypeRouteImport.update({
+  id: '/$type',
+  path: '/$type',
+  getParentRoute: () => MachineryRoute,
 } as any)
 const IndustriesSlugRoute = IndustriesSlugRouteImport.update({
   id: '/industries/$slug',
@@ -119,13 +131,15 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
-  '/machinery': typeof MachineryRoute
+  '/machinery': typeof MachineryRouteWithChildren
   '/services': typeof ServicesRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/category/$slug': typeof CategorySlugRouteWithChildren
   '/industries/$slug': typeof IndustriesSlugRoute
+  '/machinery/$type': typeof MachineryTypeRoute
   '/services/$slug': typeof ServicesSlugRoute
+  '/machinery/': typeof MachineryIndexRoute
   '/services/': typeof ServicesIndexRoute
   '/admin/enquiries': typeof AuthenticatedAdminEnquiriesRoute
   '/admin/machinery': typeof AuthenticatedAdminMachineryRoute
@@ -137,11 +151,12 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
-  '/machinery': typeof MachineryRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/category/$slug': typeof CategorySlugRouteWithChildren
   '/industries/$slug': typeof IndustriesSlugRoute
+  '/machinery/$type': typeof MachineryTypeRoute
   '/services/$slug': typeof ServicesSlugRoute
+  '/machinery': typeof MachineryIndexRoute
   '/services': typeof ServicesIndexRoute
   '/admin/enquiries': typeof AuthenticatedAdminEnquiriesRoute
   '/admin/machinery': typeof AuthenticatedAdminMachineryRoute
@@ -155,13 +170,15 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/auth': typeof AuthRoute
   '/contact': typeof ContactRoute
-  '/machinery': typeof MachineryRoute
+  '/machinery': typeof MachineryRouteWithChildren
   '/services': typeof ServicesRouteWithChildren
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/category/$slug': typeof CategorySlugRouteWithChildren
   '/industries/$slug': typeof IndustriesSlugRoute
+  '/machinery/$type': typeof MachineryTypeRoute
   '/services/$slug': typeof ServicesSlugRoute
+  '/machinery/': typeof MachineryIndexRoute
   '/services/': typeof ServicesIndexRoute
   '/_authenticated/admin/enquiries': typeof AuthenticatedAdminEnquiriesRoute
   '/_authenticated/admin/machinery': typeof AuthenticatedAdminMachineryRoute
@@ -181,7 +198,9 @@ export interface FileRouteTypes {
     | '/admin'
     | '/category/$slug'
     | '/industries/$slug'
+    | '/machinery/$type'
     | '/services/$slug'
+    | '/machinery/'
     | '/services/'
     | '/admin/enquiries'
     | '/admin/machinery'
@@ -193,11 +212,12 @@ export interface FileRouteTypes {
     | '/about'
     | '/auth'
     | '/contact'
-    | '/machinery'
     | '/sitemap.xml'
     | '/category/$slug'
     | '/industries/$slug'
+    | '/machinery/$type'
     | '/services/$slug'
+    | '/machinery'
     | '/services'
     | '/admin/enquiries'
     | '/admin/machinery'
@@ -216,7 +236,9 @@ export interface FileRouteTypes {
     | '/_authenticated/admin'
     | '/category/$slug'
     | '/industries/$slug'
+    | '/machinery/$type'
     | '/services/$slug'
+    | '/machinery/'
     | '/services/'
     | '/_authenticated/admin/enquiries'
     | '/_authenticated/admin/machinery'
@@ -230,7 +252,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   AuthRoute: typeof AuthRoute
   ContactRoute: typeof ContactRoute
-  MachineryRoute: typeof MachineryRoute
+  MachineryRoute: typeof MachineryRouteWithChildren
   ServicesRoute: typeof ServicesRouteWithChildren
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   CategorySlugRoute: typeof CategorySlugRouteWithChildren
@@ -302,12 +324,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ServicesIndexRouteImport
       parentRoute: typeof ServicesRoute
     }
+    '/machinery/': {
+      id: '/machinery/'
+      path: '/'
+      fullPath: '/machinery/'
+      preLoaderRoute: typeof MachineryIndexRouteImport
+      parentRoute: typeof MachineryRoute
+    }
     '/services/$slug': {
       id: '/services/$slug'
       path: '/$slug'
       fullPath: '/services/$slug'
       preLoaderRoute: typeof ServicesSlugRouteImport
       parentRoute: typeof ServicesRoute
+    }
+    '/machinery/$type': {
+      id: '/machinery/$type'
+      path: '/$type'
+      fullPath: '/machinery/$type'
+      preLoaderRoute: typeof MachineryTypeRouteImport
+      parentRoute: typeof MachineryRoute
     }
     '/industries/$slug': {
       id: '/industries/$slug'
@@ -387,6 +423,20 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface MachineryRouteChildren {
+  MachineryTypeRoute: typeof MachineryTypeRoute
+  MachineryIndexRoute: typeof MachineryIndexRoute
+}
+
+const MachineryRouteChildren: MachineryRouteChildren = {
+  MachineryTypeRoute: MachineryTypeRoute,
+  MachineryIndexRoute: MachineryIndexRoute,
+}
+
+const MachineryRouteWithChildren = MachineryRoute._addFileChildren(
+  MachineryRouteChildren,
+)
+
 interface ServicesRouteChildren {
   ServicesSlugRoute: typeof ServicesSlugRoute
   ServicesIndexRoute: typeof ServicesIndexRoute
@@ -419,7 +469,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   AuthRoute: AuthRoute,
   ContactRoute: ContactRoute,
-  MachineryRoute: MachineryRoute,
+  MachineryRoute: MachineryRouteWithChildren,
   ServicesRoute: ServicesRouteWithChildren,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   CategorySlugRoute: CategorySlugRouteWithChildren,
