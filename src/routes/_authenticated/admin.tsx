@@ -7,8 +7,15 @@ import { QianTronWordmark } from "@/components/QianTronWordmark";
 import { BarChart3, Inbox, Wrench, LogOut, Home } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/admin")({
+  head: () => ({
+    meta: [
+      { title: "Admin Console | QianTron" },
+      { name: "robots", content: "noindex, nofollow" },
+    ],
+  }),
   component: AdminShell,
 });
+
 
 function AdminShell() {
   const navigate = useNavigate();
