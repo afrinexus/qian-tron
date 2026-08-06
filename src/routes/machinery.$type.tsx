@@ -65,10 +65,20 @@ export const Route = createFileRoute("/machinery/$type")({
         { property: "og:description", content: desc },
         { property: "og:type", content: "website" },
         { property: "og:url", content: url },
-        { property: "og:image", content: c.hero },
+        { property: "og:site_name", content: "QianTron" },
+        { property: "og:locale", content: "en_US" },
+        { property: "og:image", content: toAbsoluteUrl(c.hero) },
+        { property: "og:image:secure_url", content: toAbsoluteUrl(c.hero) },
+        { property: "og:image:alt", content: `${c.name} — QianTron machinery catalogue` },
+        { property: "og:image:width", content: "1200" },
+        { property: "og:image:height", content: "630" },
         { name: "twitter:card", content: "summary_large_image" },
-        { name: "twitter:image", content: c.hero },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: desc },
+        { name: "twitter:image", content: toAbsoluteUrl(c.hero) },
+        { name: "twitter:image:alt", content: `${c.name} — QianTron machinery catalogue` },
       ],
+
       links: [{ rel: "canonical", href: url }],
       scripts: [
         {

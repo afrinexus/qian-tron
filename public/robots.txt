@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /auth
 
 Sitemap: https://qian-tron.lovable.app/sitemap.xml
