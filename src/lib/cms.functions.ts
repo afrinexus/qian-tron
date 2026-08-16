@@ -23,13 +23,15 @@ export const listCatalog = createServerFn({ method: "GET" })
     return { categories: cats.data ?? [], machines: machs.data ?? [] };
   });
 
+const specsSchema = z.array(z.object({ k: z.string().max(80), v: z.string().max(80) })).max(20);
+
 const machineSchema = z.object({
   id: z.string().uuid(),
   name: z.string().min(1).max(160),
   tag: z.string().max(160),
   image: z.string().max(500),
   sort_order: z.number().int().min(0).max(9999),
-  specs: z.array(z.object({ k: z.string().max(80), v: z.string().max(80) })).max(20),
+  specs: specsSchema,
 });
 
 export const updateMachine = createServerFn({ method: "POST" })
@@ -43,12 +45,43 @@ export const updateMachine = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
+const newMachineSchema = z.object({
+  category_id: z.string().uuid(),
+  code: z.string().min(1).max(60),
+  name: z.string().min(1).max(160),
+  tag: z.string().max(160).default(""),
+  image: z.string().max(500).default(""),
+  sort_order: z.number().int().min(0).max(9999).default(0),
+  specs: specsSchema.default([]),
+});
+
+export const createMachine = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => newMachineSchema.parse(input))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.supabase as never, context.userId);
+    const { error } = await context.supabase.from("machines").insert(data as never);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const deleteMachine = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => z.object({ id: z.string().uuid() }).parse(input))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.supabase as never, context.userId);
+    const { error } = await context.supabase.from("machines").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
 const categorySchema = z.object({
   id: z.string().uuid(),
   name: z.string().min(1).max(160),
   tagline: z.string().max(400),
   intro: z.string().max(4000),
   hero_image: z.string().max(500),
+  sort_order: z.number().int().min(0).max(9999).optional(),
 });
 
 export const updateCategory = createServerFn({ method: "POST" })
@@ -61,6 +94,39 @@ export const updateCategory = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+const newCategorySchema = z.object({
+  slug: z.string().min(1).max(80).regex(/^[a-z0-9-]+$/, "Use lowercase letters, numbers and dashes"),
+  name: z.string().min(1).max(160),
+  ref: z.string().min(1).max(40),
+  tagline: z.string().max(400).default(""),
+  intro: z.string().max(4000).default(""),
+  hero_image: z.string().max(500).default(""),
+  sort_order: z.number().int().min(0).max(9999).default(0),
+});
+
+export const createCategory = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => newCategorySchema.parse(input))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.supabase as never, context.userId);
+    const { error } = await context.supabase.from("categories").insert(data as never);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const deleteCategory = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: unknown) => z.object({ id: z.string().uuid() }).parse(input))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.supabase as never, context.userId);
+    const machines = await context.supabase.from("machines").delete().eq("category_id", data.id);
+    if (machines.error) throw new Error(machines.error.message);
+    const { error } = await context.supabase.from("categories").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
 
 export const checkIsAdmin = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
