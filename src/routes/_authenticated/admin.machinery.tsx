@@ -24,7 +24,7 @@ type Machine = {
 };
 type Category = {
   id: string; slug: string; name: string; ref: string;
-  tagline: string; intro: string; hero_image: string; sort_order?: number;
+  tagline: string; intro: string; hero_image: string; gallery: string[]; sort_order?: number;
 };
 type NewMachine = Omit<Machine, "id">;
 type NewCategory = Omit<Category, "id">;
