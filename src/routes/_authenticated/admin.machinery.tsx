@@ -240,7 +240,10 @@ function MachineDrawer({ m, onClose, onSave, onDelete, saving, isNew }: {
         <Field label="Name"><input className="input" value={state.name} onChange={(e) => setState({ ...state, name: e.target.value })} /></Field>
         <Field label="Tag"><input className="input" value={state.tag} onChange={(e) => setState({ ...state, tag: e.target.value })} /></Field>
         <Field label="Sort order"><input type="number" className="input" value={state.sort_order} onChange={(e) => setState({ ...state, sort_order: Number(e.target.value) })} /></Field>
-        <Field label="Image URL"><input className="input" value={state.image} onChange={(e) => setState({ ...state, image: e.target.value })} /></Field>
+        <Field label="Image URL">
+          <input className="input" value={state.image} onChange={(e) => setState({ ...state, image: e.target.value })} />
+          {state.image ? <img src={state.image} alt="" className="mt-2 h-20 w-full object-cover" /> : null}
+        </Field>
       </div>
       <div className="mt-6">
         <div className="section-eyebrow">Specs</div>
