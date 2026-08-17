@@ -2,14 +2,17 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { SiteNav, SiteFooter } from "@/components/SiteChrome";
 import { FabricPattern } from "@/components/FabricPattern";
 import { fabric } from "@/lib/fabric-presets";
-import { CATEGORIES, CONTACT, categoryBySlug, toAbsoluteUrl, type Category } from "@/lib/site";
+import { CONTACT, toAbsoluteUrl, type Category } from "@/lib/site";
+import { getPublicCatalog } from "@/lib/catalog.functions";
+import { mergeCatalog } from "@/lib/catalog-merge";
 import { INDUSTRIES } from "@/lib/industries";
 
 export const Route = createFileRoute("/machinery/$type")({
-  loader: ({ params }) => {
-    const category = categoryBySlug(params.type);
+  loader: async ({ params }) => {
+    const all = mergeCatalog(await getPublicCatalog());
+    const category = all.find((c) => c.slug === params.type);
     if (!category) throw notFound();
-    return { category };
+    return { category, others: all.filter((c) => c.slug !== params.type) };
   },
   head: ({ loaderData }) => {
     const c = loaderData?.category;
