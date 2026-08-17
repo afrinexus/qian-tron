@@ -24,7 +24,7 @@ type Machine = {
 };
 type Category = {
   id: string; slug: string; name: string; ref: string;
-  tagline: string; intro: string; hero_image: string; sort_order?: number;
+  tagline: string; intro: string; hero_image: string; gallery: string[]; sort_order?: number;
 };
 type NewMachine = Omit<Machine, "id">;
 type NewCategory = Omit<Category, "id">;
@@ -61,7 +61,7 @@ function MachineryCMS() {
   const cMut = useMutation({
     mutationFn: (c: Category) => patchCategory({ data: {
       id: c.id, name: c.name, tagline: c.tagline, intro: c.intro,
-      hero_image: c.hero_image, sort_order: c.sort_order ?? 0,
+      hero_image: c.hero_image, gallery: c.gallery ?? [], sort_order: c.sort_order ?? 0,
     } as never }),
     onSuccess: () => { invalidate(); toast.success("Category saved."); setEditCategory(null); },
     onError: fail,
@@ -189,7 +189,7 @@ function MachineryCMS() {
       )}
       {newCategory && (
         <CategoryDrawer
-          c={{ slug: "", name: "", ref: "", tagline: "", intro: "", hero_image: "", sort_order: 0 }}
+          c={{ slug: "", name: "", ref: "", tagline: "", intro: "", hero_image: "", gallery: [], sort_order: 0 }}
           isNew
           onClose={() => setNewCategory(false)}
           onSave={(c) => cNew.mutate(c as NewCategory)}
@@ -240,7 +240,10 @@ function MachineDrawer({ m, onClose, onSave, onDelete, saving, isNew }: {
         <Field label="Name"><input className="input" value={state.name} onChange={(e) => setState({ ...state, name: e.target.value })} /></Field>
         <Field label="Tag"><input className="input" value={state.tag} onChange={(e) => setState({ ...state, tag: e.target.value })} /></Field>
         <Field label="Sort order"><input type="number" className="input" value={state.sort_order} onChange={(e) => setState({ ...state, sort_order: Number(e.target.value) })} /></Field>
-        <Field label="Image URL"><input className="input" value={state.image} onChange={(e) => setState({ ...state, image: e.target.value })} /></Field>
+        <Field label="Image URL">
+          <input className="input" value={state.image} onChange={(e) => setState({ ...state, image: e.target.value })} />
+          {state.image ? <img src={state.image} alt="" className="mt-2 h-20 w-full object-cover" /> : null}
+        </Field>
       </div>
       <div className="mt-6">
         <div className="section-eyebrow">Specs</div>
@@ -282,7 +285,10 @@ function CategoryDrawer({ c, onClose, onSave, onDelete, saving, isNew }: {
           </>
         )}
         <Field label="Name"><input className="input" value={state.name} onChange={(e) => setState({ ...state, name: e.target.value })} /></Field>
-        <Field label="Hero image URL"><input className="input" value={state.hero_image} onChange={(e) => setState({ ...state, hero_image: e.target.value })} /></Field>
+        <Field label="Hero image URL">
+          <input className="input" value={state.hero_image} onChange={(e) => setState({ ...state, hero_image: e.target.value })} />
+          {state.hero_image ? <img src={state.hero_image} alt="" className="mt-2 h-20 w-full object-cover" /> : null}
+        </Field>
         <Field label="Sort order"><input type="number" className="input" value={state.sort_order ?? 0} onChange={(e) => setState({ ...state, sort_order: Number(e.target.value) })} /></Field>
       </div>
       <div className="mt-4">
@@ -290,6 +296,21 @@ function CategoryDrawer({ c, onClose, onSave, onDelete, saving, isNew }: {
       </div>
       <div className="mt-4">
         <Field label="Intro"><textarea rows={4} className="input" value={state.intro} onChange={(e) => setState({ ...state, intro: e.target.value })} /></Field>
+      </div>
+      <div className="mt-6">
+        <div className="section-eyebrow">Catalogue gallery images</div>
+        <div className="mt-3 space-y-2">
+          {(state.gallery ?? []).map((url, i) => (
+            <div key={i} className="grid grid-cols-[auto_1fr_auto] items-center gap-2">
+              {url ? <img src={url} alt="" className="h-12 w-16 object-cover" /> : <div className="h-12 w-16 bg-concrete" />}
+              <input className="input" placeholder="https://…" value={url} onChange={(e) => {
+                const copy = [...(state.gallery ?? [])]; copy[i] = e.target.value; setState({ ...state, gallery: copy });
+              }} />
+              <button onClick={() => setState({ ...state, gallery: (state.gallery ?? []).filter((_, j) => j !== i) })} className="border border-border px-3 text-sm">×</button>
+            </div>
+          ))}
+          <button onClick={() => setState({ ...state, gallery: [...(state.gallery ?? []), ""] })} className="border border-border px-4 py-2 text-[11px] uppercase tracking-[0.25em]">+ Add image</button>
+        </div>
       </div>
       <Actions onClose={onClose} onSave={() => onSave(state)} onDelete={onDelete} saving={saving} label={isNew ? "Create" : "Save"} />
       <style>{inputCss}</style>

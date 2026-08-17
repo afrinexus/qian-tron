@@ -75,12 +75,15 @@ export const deleteMachine = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
+const gallerySchema = z.array(z.string().max(500)).max(12);
+
 const categorySchema = z.object({
   id: z.string().uuid(),
   name: z.string().min(1).max(160),
   tagline: z.string().max(400),
   intro: z.string().max(4000),
   hero_image: z.string().max(500),
+  gallery: gallerySchema.default([]),
   sort_order: z.number().int().min(0).max(9999).optional(),
 });
 
@@ -102,6 +105,7 @@ const newCategorySchema = z.object({
   tagline: z.string().max(400).default(""),
   intro: z.string().max(4000).default(""),
   hero_image: z.string().max(500).default(""),
+  gallery: gallerySchema.default([]),
   sort_order: z.number().int().min(0).max(9999).default(0),
 });
 

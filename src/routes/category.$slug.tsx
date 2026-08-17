@@ -1,15 +1,18 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import type { Category } from "@/lib/site";
-import { CATEGORIES, CONTACT, categoryBySlug } from "@/lib/site";
+import { CONTACT } from "@/lib/site";
+import { getPublicCatalog } from "@/lib/catalog.functions";
+import { mergeCatalog } from "@/lib/catalog-merge";
 import { SiteNav, SiteFooter } from "@/components/SiteChrome";
 import { SquareCanvas } from "@/components/SquareCanvas";
 import { FabricPattern } from "@/components/FabricPattern";
 
 export const Route = createFileRoute("/category/$slug")({
-  loader: ({ params }) => {
-    const category = categoryBySlug(params.slug);
+  loader: async ({ params }) => {
+    const all = mergeCatalog(await getPublicCatalog());
+    const category = all.find((c) => c.slug === params.slug);
     if (!category) throw notFound();
-    return { category };
+    return { category, others: all.filter((c) => c.slug !== params.slug).slice(0, 4) };
   },
   head: ({ loaderData }) => {
     const c = loaderData?.category;
@@ -93,8 +96,10 @@ export const Route = createFileRoute("/category/$slug")({
 });
 
 function CategoryPage() {
-  const { category: c } = Route.useLoaderData() as { category: Category };
-  const others = CATEGORIES.filter((x) => x.slug !== c.slug).slice(0, 4);
+  const { category: c, others } = Route.useLoaderData() as {
+    category: Category;
+    others: Category[];
+  };
 
   return (
     <main className="min-h-screen bg-arch-white">
