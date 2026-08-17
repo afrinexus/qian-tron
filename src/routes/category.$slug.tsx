@@ -96,8 +96,10 @@ export const Route = createFileRoute("/category/$slug")({
 });
 
 function CategoryPage() {
-  const { category: c } = Route.useLoaderData() as { category: Category };
-  const others = CATEGORIES.filter((x) => x.slug !== c.slug).slice(0, 4);
+  const { category: c, others } = Route.useLoaderData() as {
+    category: Category;
+    others: Category[];
+  };
 
   return (
     <main className="min-h-screen bg-arch-white">
