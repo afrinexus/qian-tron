@@ -61,7 +61,7 @@ function MachineryCMS() {
   const cMut = useMutation({
     mutationFn: (c: Category) => patchCategory({ data: {
       id: c.id, name: c.name, tagline: c.tagline, intro: c.intro,
-      hero_image: c.hero_image, sort_order: c.sort_order ?? 0,
+      hero_image: c.hero_image, gallery: c.gallery ?? [], sort_order: c.sort_order ?? 0,
     } as never }),
     onSuccess: () => { invalidate(); toast.success("Category saved."); setEditCategory(null); },
     onError: fail,
@@ -189,7 +189,7 @@ function MachineryCMS() {
       )}
       {newCategory && (
         <CategoryDrawer
-          c={{ slug: "", name: "", ref: "", tagline: "", intro: "", hero_image: "", sort_order: 0 }}
+          c={{ slug: "", name: "", ref: "", tagline: "", intro: "", hero_image: "", gallery: [], sort_order: 0 }}
           isNew
           onClose={() => setNewCategory(false)}
           onSave={(c) => cNew.mutate(c as NewCategory)}
