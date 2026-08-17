@@ -1,6 +1,8 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { CONTACT, machineByCode } from "@/lib/site";
+import { CONTACT } from "@/lib/site";
 import type { Category, Machine } from "@/lib/site";
+import { getPublicCatalog } from "@/lib/catalog.functions";
+import { mergeCatalog } from "@/lib/catalog-merge";
 import { SiteNav, SiteFooter } from "@/components/SiteChrome";
 import { SquareCanvas } from "@/components/SquareCanvas";
 import { FabricPattern } from "@/components/FabricPattern";
@@ -8,10 +10,14 @@ import { FabricPattern } from "@/components/FabricPattern";
 const BASE_URL = "https://qian-tron.lovable.app";
 
 export const Route = createFileRoute("/category/$slug/$machine")({
-  loader: ({ params }) => {
-    const found = machineByCode(params.slug, params.machine);
-    if (!found) throw notFound();
-    return found;
+  loader: async ({ params }) => {
+    const all = mergeCatalog(await getPublicCatalog());
+    const category = all.find((c) => c.slug === params.slug);
+    const machine = category?.machines.find(
+      (m) => m.code.toLowerCase() === params.machine.toLowerCase(),
+    );
+    if (!category || !machine) throw notFound();
+    return { category, machine };
   },
   head: ({ loaderData, params }) => {
     if (!loaderData) {
