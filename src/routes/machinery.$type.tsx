@@ -173,8 +173,10 @@ export const Route = createFileRoute("/machinery/$type")({
 });
 
 function MachineryTypePage() {
-  const { category: c } = Route.useLoaderData() as { category: Category };
-  const others = CATEGORIES.filter((x) => x.slug !== c.slug);
+  const { category: c, others } = Route.useLoaderData() as {
+    category: Category;
+    others: Category[];
+  };
   const industries = INDUSTRIES.filter((i) => i.machineryCategories.includes(c.slug));
 
   return (
