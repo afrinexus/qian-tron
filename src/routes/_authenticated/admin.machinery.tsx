@@ -294,6 +294,21 @@ function CategoryDrawer({ c, onClose, onSave, onDelete, saving, isNew }: {
       <div className="mt-4">
         <Field label="Intro"><textarea rows={4} className="input" value={state.intro} onChange={(e) => setState({ ...state, intro: e.target.value })} /></Field>
       </div>
+      <div className="mt-6">
+        <div className="section-eyebrow">Catalogue gallery images</div>
+        <div className="mt-3 space-y-2">
+          {(state.gallery ?? []).map((url, i) => (
+            <div key={i} className="grid grid-cols-[auto_1fr_auto] items-center gap-2">
+              {url ? <img src={url} alt="" className="h-12 w-16 object-cover" /> : <div className="h-12 w-16 bg-concrete" />}
+              <input className="input" placeholder="https://…" value={url} onChange={(e) => {
+                const copy = [...(state.gallery ?? [])]; copy[i] = e.target.value; setState({ ...state, gallery: copy });
+              }} />
+              <button onClick={() => setState({ ...state, gallery: (state.gallery ?? []).filter((_, j) => j !== i) })} className="border border-border px-3 text-sm">×</button>
+            </div>
+          ))}
+          <button onClick={() => setState({ ...state, gallery: [...(state.gallery ?? []), ""] })} className="border border-border px-4 py-2 text-[11px] uppercase tracking-[0.25em]">+ Add image</button>
+        </div>
+      </div>
       <Actions onClose={onClose} onSave={() => onSave(state)} onDelete={onDelete} saving={saving} label={isNew ? "Create" : "Save"} />
       <style>{inputCss}</style>
     </Drawer>
