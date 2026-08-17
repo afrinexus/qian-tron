@@ -105,6 +105,7 @@ const newCategorySchema = z.object({
   tagline: z.string().max(400).default(""),
   intro: z.string().max(4000).default(""),
   hero_image: z.string().max(500).default(""),
+  gallery: gallerySchema.default([]),
   sort_order: z.number().int().min(0).max(9999).default(0),
 });
 
