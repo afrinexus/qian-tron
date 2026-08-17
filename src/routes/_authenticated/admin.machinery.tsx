@@ -282,7 +282,10 @@ function CategoryDrawer({ c, onClose, onSave, onDelete, saving, isNew }: {
           </>
         )}
         <Field label="Name"><input className="input" value={state.name} onChange={(e) => setState({ ...state, name: e.target.value })} /></Field>
-        <Field label="Hero image URL"><input className="input" value={state.hero_image} onChange={(e) => setState({ ...state, hero_image: e.target.value })} /></Field>
+        <Field label="Hero image URL">
+          <input className="input" value={state.hero_image} onChange={(e) => setState({ ...state, hero_image: e.target.value })} />
+          {state.hero_image ? <img src={state.hero_image} alt="" className="mt-2 h-20 w-full object-cover" /> : null}
+        </Field>
         <Field label="Sort order"><input type="number" className="input" value={state.sort_order ?? 0} onChange={(e) => setState({ ...state, sort_order: Number(e.target.value) })} /></Field>
       </div>
       <div className="mt-4">
