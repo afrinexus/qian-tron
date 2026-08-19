@@ -19,6 +19,9 @@ export type Database = {
           applications: Json
           created_at: string
           gallery: Json
+          hero_alt: string
+          hero_caption: string
+          hero_focal: string
           hero_image: string
           highlights: Json
           id: string
@@ -34,6 +37,9 @@ export type Database = {
           applications?: Json
           created_at?: string
           gallery?: Json
+          hero_alt?: string
+          hero_caption?: string
+          hero_focal?: string
           hero_image?: string
           highlights?: Json
           id?: string
@@ -49,6 +55,9 @@ export type Database = {
           applications?: Json
           created_at?: string
           gallery?: Json
+          hero_alt?: string
+          hero_caption?: string
+          hero_focal?: string
           hero_image?: string
           highlights?: Json
           id?: string
@@ -117,6 +126,9 @@ export type Database = {
           created_at: string
           id: string
           image: string
+          image_alt: string
+          image_caption: string
+          image_focal: string
           name: string
           sort_order: number
           specs: Json
@@ -129,6 +141,9 @@ export type Database = {
           created_at?: string
           id?: string
           image?: string
+          image_alt?: string
+          image_caption?: string
+          image_focal?: string
           name: string
           sort_order?: number
           specs?: Json
@@ -141,6 +156,9 @@ export type Database = {
           created_at?: string
           id?: string
           image?: string
+          image_alt?: string
+          image_caption?: string
+          image_focal?: string
           name?: string
           sort_order?: number
           specs?: Json

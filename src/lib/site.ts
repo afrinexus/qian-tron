@@ -7,6 +7,7 @@ import craneAsset from "@/assets/crane.jpg.asset.json";
 import truckBlueAsset from "@/assets/truck-blue.jpg.asset.json";
 import truckRedAsset from "@/assets/truck-red.jpg.asset.json";
 import catBlackAsset from "@/assets/cat-black.jpg.asset.json";
+import type { GalleryItem } from "@/lib/media";
 
 /**
  * Public origin used to promote CDN asset URLs to absolute, globally
@@ -46,6 +47,10 @@ export type Machine = {
   code: string;
   name: string;
   image: string;
+  /** CSS object-position focal point for the machine photo, e.g. "50% 40%". */
+  imageFocal?: string;
+  imageAlt?: string;
+  imageCaption?: string;
   tag: string;
   specs: { k: string; v: string }[];
 };
@@ -56,7 +61,10 @@ export type Category = {
   ref: string;
   tagline: string;
   hero: string;
-  gallery: string[];
+  heroFocal?: string;
+  heroAlt?: string;
+  heroCaption?: string;
+  gallery: GalleryItem[];
   intro: string;
   highlights: { k: string; v: string }[];
   applications: string[];

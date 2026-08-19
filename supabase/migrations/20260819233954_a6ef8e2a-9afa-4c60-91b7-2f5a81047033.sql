@@ -1,0 +1,9 @@
+ALTER TABLE public.categories
+  ADD COLUMN IF NOT EXISTS hero_focal text NOT NULL DEFAULT '50% 50%',
+  ADD COLUMN IF NOT EXISTS hero_alt text NOT NULL DEFAULT '',
+  ADD COLUMN IF NOT EXISTS hero_caption text NOT NULL DEFAULT '';
+
+ALTER TABLE public.machines
+  ADD COLUMN IF NOT EXISTS image_focal text NOT NULL DEFAULT '50% 50%',
+  ADD COLUMN IF NOT EXISTS image_alt text NOT NULL DEFAULT '',
+  ADD COLUMN IF NOT EXISTS image_caption text NOT NULL DEFAULT '';
