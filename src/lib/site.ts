@@ -7,6 +7,7 @@ import craneAsset from "@/assets/crane.jpg.asset.json";
 import truckBlueAsset from "@/assets/truck-blue.jpg.asset.json";
 import truckRedAsset from "@/assets/truck-red.jpg.asset.json";
 import catBlackAsset from "@/assets/cat-black.jpg.asset.json";
+import type { GalleryItem } from "@/lib/media";
 
 /**
  * Public origin used to promote CDN asset URLs to absolute, globally
