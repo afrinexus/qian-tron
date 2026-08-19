@@ -12,6 +12,8 @@ import {
 } from "@/lib/cms.functions";
 import { useState } from "react";
 import { toast } from "sonner";
+import { ImageField, GalleryField } from "@/components/CmsImagePicker";
+
 
 export const Route = createFileRoute("/_authenticated/admin/machinery")({
   component: MachineryCMS,
@@ -240,10 +242,10 @@ function MachineDrawer({ m, onClose, onSave, onDelete, saving, isNew }: {
         <Field label="Name"><input className="input" value={state.name} onChange={(e) => setState({ ...state, name: e.target.value })} /></Field>
         <Field label="Tag"><input className="input" value={state.tag} onChange={(e) => setState({ ...state, tag: e.target.value })} /></Field>
         <Field label="Sort order"><input type="number" className="input" value={state.sort_order} onChange={(e) => setState({ ...state, sort_order: Number(e.target.value) })} /></Field>
-        <Field label="Image URL">
-          <input className="input" value={state.image} onChange={(e) => setState({ ...state, image: e.target.value })} />
-          {state.image ? <img src={state.image} alt="" className="mt-2 h-20 w-full object-cover" /> : null}
+        <Field label="Image">
+          <ImageField value={state.image} onChange={(url) => setState({ ...state, image: url })} />
         </Field>
+
       </div>
       <div className="mt-6">
         <div className="section-eyebrow">Specs</div>
@@ -285,10 +287,10 @@ function CategoryDrawer({ c, onClose, onSave, onDelete, saving, isNew }: {
           </>
         )}
         <Field label="Name"><input className="input" value={state.name} onChange={(e) => setState({ ...state, name: e.target.value })} /></Field>
-        <Field label="Hero image URL">
-          <input className="input" value={state.hero_image} onChange={(e) => setState({ ...state, hero_image: e.target.value })} />
-          {state.hero_image ? <img src={state.hero_image} alt="" className="mt-2 h-20 w-full object-cover" /> : null}
+        <Field label="Hero image">
+          <ImageField value={state.hero_image} onChange={(url) => setState({ ...state, hero_image: url })} />
         </Field>
+
         <Field label="Sort order"><input type="number" className="input" value={state.sort_order ?? 0} onChange={(e) => setState({ ...state, sort_order: Number(e.target.value) })} /></Field>
       </div>
       <div className="mt-4">
@@ -299,19 +301,9 @@ function CategoryDrawer({ c, onClose, onSave, onDelete, saving, isNew }: {
       </div>
       <div className="mt-6">
         <div className="section-eyebrow">Catalogue gallery images</div>
-        <div className="mt-3 space-y-2">
-          {(state.gallery ?? []).map((url, i) => (
-            <div key={i} className="grid grid-cols-[auto_1fr_auto] items-center gap-2">
-              {url ? <img src={url} alt="" className="h-12 w-16 object-cover" /> : <div className="h-12 w-16 bg-concrete" />}
-              <input className="input" placeholder="https://…" value={url} onChange={(e) => {
-                const copy = [...(state.gallery ?? [])]; copy[i] = e.target.value; setState({ ...state, gallery: copy });
-              }} />
-              <button onClick={() => setState({ ...state, gallery: (state.gallery ?? []).filter((_, j) => j !== i) })} className="border border-border px-3 text-sm">×</button>
-            </div>
-          ))}
-          <button onClick={() => setState({ ...state, gallery: [...(state.gallery ?? []), ""] })} className="border border-border px-4 py-2 text-[11px] uppercase tracking-[0.25em]">+ Add image</button>
-        </div>
+        <GalleryField value={state.gallery ?? []} onChange={(gallery) => setState({ ...state, gallery })} />
       </div>
+
       <Actions onClose={onClose} onSave={() => onSave(state)} onDelete={onDelete} saving={saving} label={isNew ? "Create" : "Save"} />
       <style>{inputCss}</style>
     </Drawer>
