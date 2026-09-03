@@ -6,6 +6,7 @@ import { CONTACT, toAbsoluteUrl, type Category } from "@/lib/site";
 import { getPublicCatalog } from "@/lib/catalog.functions";
 import { mergeCatalog } from "@/lib/catalog-merge";
 import { INDUSTRIES } from "@/lib/industries";
+import { FocalImage } from "@/components/FocalImage";
 
 export const Route = createFileRoute("/machinery/$type")({
   loader: async ({ params }) => {
@@ -255,7 +256,7 @@ function MachineryTypePage() {
                 className="group flex flex-col overflow-hidden border border-border bg-arch-white transition hover:border-dragon"
               >
                 <div className="relative aspect-[4/3] overflow-hidden bg-charcoal">
-                  <img src={m.image} alt={m.name} className="h-full w-full object-cover opacity-90 transition duration-700 group-hover:scale-105" />
+                  <FocalImage image={{ url: m.image, focal: m.imageFocal, alt: m.imageAlt }} fallbackAlt={m.name} className="h-full w-full object-cover opacity-90 transition duration-700 group-hover:scale-105" />
                   <div className="absolute left-0 top-0 bg-dragon px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.25em] text-arch-white">
                     {m.code}
                   </div>
