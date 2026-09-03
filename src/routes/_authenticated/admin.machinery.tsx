@@ -13,6 +13,7 @@ import {
 import { useState } from "react";
 import { toast } from "sonner";
 import { ImageField, GalleryField } from "@/components/CmsImagePicker";
+import { DEFAULT_FOCAL, resolveImage, type GalleryItem, type ImageMeta } from "@/lib/media";
 
 
 export const Route = createFileRoute("/_authenticated/admin/machinery")({
@@ -22,11 +23,13 @@ export const Route = createFileRoute("/_authenticated/admin/machinery")({
 type Spec = { k: string; v: string };
 type Machine = {
   id: string; category_id: string; code: string; name: string;
-  tag: string; image: string; sort_order: number; specs: Spec[];
+  tag: string; image: string; image_focal: string; image_alt: string; image_caption: string;
+  sort_order: number; specs: Spec[];
 };
 type Category = {
   id: string; slug: string; name: string; ref: string;
-  tagline: string; intro: string; hero_image: string; gallery: string[]; sort_order?: number;
+  tagline: string; intro: string; hero_image: string; hero_focal: string;
+  hero_alt: string; hero_caption: string; gallery: GalleryItem[]; sort_order?: number;
 };
 type NewMachine = Omit<Machine, "id">;
 type NewCategory = Omit<Category, "id">;
@@ -55,6 +58,7 @@ function MachineryCMS() {
   const mMut = useMutation({
     mutationFn: (m: Machine) => patchMachine({ data: {
       id: m.id, name: m.name, tag: m.tag, image: m.image,
+      image_focal: m.image_focal || DEFAULT_FOCAL, image_alt: m.image_alt ?? "", image_caption: m.image_caption ?? "",
       sort_order: m.sort_order, specs: m.specs,
     } as never }),
     onSuccess: () => { invalidate(); toast.success("Machine saved."); setEditMachine(null); },
@@ -63,7 +67,9 @@ function MachineryCMS() {
   const cMut = useMutation({
     mutationFn: (c: Category) => patchCategory({ data: {
       id: c.id, name: c.name, tagline: c.tagline, intro: c.intro,
-      hero_image: c.hero_image, gallery: c.gallery ?? [], sort_order: c.sort_order ?? 0,
+      hero_image: c.hero_image, hero_focal: c.hero_focal || DEFAULT_FOCAL,
+      hero_alt: c.hero_alt ?? "", hero_caption: c.hero_caption ?? "",
+      gallery: c.gallery ?? [], sort_order: c.sort_order ?? 0,
     } as never }),
     onSuccess: () => { invalidate(); toast.success("Category saved."); setEditCategory(null); },
     onError: fail,
@@ -116,7 +122,7 @@ function MachineryCMS() {
             <section key={cat.id} className="border border-border bg-arch-white">
               <header className="flex flex-wrap items-center justify-between gap-4 border-b border-border p-5">
                 <div className="flex items-center gap-4">
-                  {cat.hero_image ? <img src={cat.hero_image} alt="" className="h-14 w-20 object-cover" /> : null}
+                  {cat.hero_image ? <img src={cat.hero_image} alt={cat.hero_alt || cat.name} style={{ objectPosition: cat.hero_focal || DEFAULT_FOCAL }} className="h-14 w-20 object-cover" /> : null}
                   <div>
                     <div className="text-[10px] uppercase tracking-[0.3em] text-steel">Series {cat.ref} · /{cat.slug}</div>
                     <div className="text-display text-xl font-black">{cat.name}</div>
@@ -173,7 +179,7 @@ function MachineryCMS() {
       )}
       {newMachineFor && (
         <MachineDrawer
-          m={{ category_id: newMachineFor, code: "", name: "", tag: "", image: "", sort_order: 0, specs: [] }}
+          m={{ category_id: newMachineFor, code: "", name: "", tag: "", image: "", image_focal: DEFAULT_FOCAL, image_alt: "", image_caption: "", sort_order: 0, specs: [] }}
           isNew
           onClose={() => setNewMachineFor(null)}
           onSave={(m) => mNew.mutate(m as NewMachine)}
@@ -191,7 +197,7 @@ function MachineryCMS() {
       )}
       {newCategory && (
         <CategoryDrawer
-          c={{ slug: "", name: "", ref: "", tagline: "", intro: "", hero_image: "", gallery: [], sort_order: 0 }}
+          c={{ slug: "", name: "", ref: "", tagline: "", intro: "", hero_image: "", hero_focal: DEFAULT_FOCAL, hero_alt: "", hero_caption: "", gallery: [], sort_order: 0 }}
           isNew
           onClose={() => setNewCategory(false)}
           onSave={(c) => cNew.mutate(c as NewCategory)}
@@ -242,9 +248,14 @@ function MachineDrawer({ m, onClose, onSave, onDelete, saving, isNew }: {
         <Field label="Name"><input className="input" value={state.name} onChange={(e) => setState({ ...state, name: e.target.value })} /></Field>
         <Field label="Tag"><input className="input" value={state.tag} onChange={(e) => setState({ ...state, tag: e.target.value })} /></Field>
         <Field label="Sort order"><input type="number" className="input" value={state.sort_order} onChange={(e) => setState({ ...state, sort_order: Number(e.target.value) })} /></Field>
-        <Field label="Image">
-          <ImageField value={state.image} onChange={(url) => setState({ ...state, image: url })} />
-        </Field>
+        <div className="sm:col-span-2">
+          <Field label="Image · crop, alt text & caption">
+            <ImageField
+              value={resolveImage({ url: state.image, focal: state.image_focal, alt: state.image_alt, caption: state.image_caption }, state.name)}
+              onChange={(meta: ImageMeta) => setState({ ...state, image: meta.url, image_focal: meta.focal, image_alt: meta.alt, image_caption: meta.caption })}
+            />
+          </Field>
+        </div>
 
       </div>
       <div className="mt-6">
@@ -287,9 +298,14 @@ function CategoryDrawer({ c, onClose, onSave, onDelete, saving, isNew }: {
           </>
         )}
         <Field label="Name"><input className="input" value={state.name} onChange={(e) => setState({ ...state, name: e.target.value })} /></Field>
-        <Field label="Hero image">
-          <ImageField value={state.hero_image} onChange={(url) => setState({ ...state, hero_image: url })} />
-        </Field>
+        <div className="sm:col-span-2">
+          <Field label="Hero image · crop, alt text & caption">
+            <ImageField
+              value={resolveImage({ url: state.hero_image, focal: state.hero_focal, alt: state.hero_alt, caption: state.hero_caption }, state.name)}
+              onChange={(meta: ImageMeta) => setState({ ...state, hero_image: meta.url, hero_focal: meta.focal, hero_alt: meta.alt, hero_caption: meta.caption })}
+            />
+          </Field>
+        </div>
 
         <Field label="Sort order"><input type="number" className="input" value={state.sort_order ?? 0} onChange={(e) => setState({ ...state, sort_order: Number(e.target.value) })} /></Field>
       </div>

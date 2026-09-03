@@ -6,6 +6,7 @@ import { mergeCatalog } from "@/lib/catalog-merge";
 import { SiteNav, SiteFooter } from "@/components/SiteChrome";
 import { SquareCanvas } from "@/components/SquareCanvas";
 import { FabricPattern } from "@/components/FabricPattern";
+import { FocalImage, ImageCaption } from "@/components/FocalImage";
 
 const BASE_URL = "https://qian-tron.lovable.app";
 
@@ -189,7 +190,7 @@ function MachinePage() {
 
       {/* Hero */}
       <section className="relative min-h-[80vh] overflow-hidden bg-charcoal text-arch-white">
-        <img src={m.image} alt={m.name} className="absolute inset-0 h-full w-full object-cover opacity-55" />
+        <FocalImage image={{ url: m.image, focal: m.imageFocal, alt: m.imageAlt }} fallbackAlt={m.name} className="absolute inset-0 h-full w-full object-cover opacity-55" />
         <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/70 to-charcoal/20" />
         <SquareCanvas className="pointer-events-none absolute inset-0 h-full w-full opacity-60" />
         <div className="relative mx-auto flex min-h-[80vh] max-w-[1400px] flex-col justify-end px-6 pb-20 pt-32 md:px-10">
@@ -231,11 +232,12 @@ function MachinePage() {
         <div className="relative mx-auto grid max-w-[1400px] grid-cols-1 gap-12 px-6 md:grid-cols-12 md:px-10">
           <div className="md:col-span-7">
             <div className="relative aspect-[4/3] overflow-hidden border border-border bg-concrete">
-              <img src={m.image} alt={m.name} className="h-full w-full object-cover" />
+              <FocalImage image={{ url: m.image, focal: m.imageFocal, alt: m.imageAlt }} fallbackAlt={m.name} className="h-full w-full object-cover" />
               <div className="absolute left-0 top-0 bg-dragon px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.25em] text-arch-white">
                 {m.code}
               </div>
             </div>
+            <ImageCaption text={m.imageCaption ?? ""} />
           </div>
           <div className="md:col-span-5">
             <div className="section-eyebrow">Chapter I · Overview</div>

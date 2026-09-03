@@ -25,11 +25,19 @@ export const listCatalog = createServerFn({ method: "GET" })
 
 const specsSchema = z.array(z.object({ k: z.string().max(80), v: z.string().max(80) })).max(20);
 
+const focalSchema = z
+  .string()
+  .regex(/^\d{1,3}% \d{1,3}%$/, "Focal point must look like \"50% 40%\"")
+  .default("50% 50%");
+
 const machineSchema = z.object({
   id: z.string().uuid(),
   name: z.string().min(1).max(160),
   tag: z.string().max(160),
   image: z.string().max(500),
+  image_focal: focalSchema,
+  image_alt: z.string().max(300).default(""),
+  image_caption: z.string().max(300).default(""),
   sort_order: z.number().int().min(0).max(9999),
   specs: specsSchema,
 });
@@ -51,6 +59,9 @@ const newMachineSchema = z.object({
   name: z.string().min(1).max(160),
   tag: z.string().max(160).default(""),
   image: z.string().max(500).default(""),
+  image_focal: focalSchema,
+  image_alt: z.string().max(300).default(""),
+  image_caption: z.string().max(300).default(""),
   sort_order: z.number().int().min(0).max(9999).default(0),
   specs: specsSchema.default([]),
 });
@@ -75,7 +86,20 @@ export const deleteMachine = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
-const gallerySchema = z.array(z.string().max(500)).max(12);
+/** Gallery slides carry their own focal point, alt text and caption. */
+const gallerySchema = z
+  .array(
+    z.union([
+      z.string().max(500),
+      z.object({
+        url: z.string().max(500),
+        focal: focalSchema,
+        alt: z.string().max(300).default(""),
+        caption: z.string().max(300).default(""),
+      }),
+    ]),
+  )
+  .max(12);
 
 const categorySchema = z.object({
   id: z.string().uuid(),
@@ -83,6 +107,9 @@ const categorySchema = z.object({
   tagline: z.string().max(400),
   intro: z.string().max(4000),
   hero_image: z.string().max(500),
+  hero_focal: focalSchema,
+  hero_alt: z.string().max(300).default(""),
+  hero_caption: z.string().max(300).default(""),
   gallery: gallerySchema.default([]),
   sort_order: z.number().int().min(0).max(9999).optional(),
 });
@@ -105,6 +132,9 @@ const newCategorySchema = z.object({
   tagline: z.string().max(400).default(""),
   intro: z.string().max(4000).default(""),
   hero_image: z.string().max(500).default(""),
+  hero_focal: focalSchema,
+  hero_alt: z.string().max(300).default(""),
+  hero_caption: z.string().max(300).default(""),
   gallery: gallerySchema.default([]),
   sort_order: z.number().int().min(0).max(9999).default(0),
 });

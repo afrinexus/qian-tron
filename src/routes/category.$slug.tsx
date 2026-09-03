@@ -6,6 +6,8 @@ import { mergeCatalog } from "@/lib/catalog-merge";
 import { SiteNav, SiteFooter } from "@/components/SiteChrome";
 import { SquareCanvas } from "@/components/SquareCanvas";
 import { FabricPattern } from "@/components/FabricPattern";
+import { FocalImage, ImageCaption } from "@/components/FocalImage";
+import { resolveImage } from "@/lib/media";
 
 export const Route = createFileRoute("/category/$slug")({
   loader: async ({ params }) => {
@@ -107,7 +109,7 @@ function CategoryPage() {
 
       {/* Hero */}
       <section className="relative min-h-[85vh] overflow-hidden bg-charcoal text-arch-white">
-        <img src={c.hero} alt={c.name} className="absolute inset-0 h-full w-full object-cover opacity-60" />
+        <FocalImage image={{ url: c.hero, focal: c.heroFocal, alt: c.heroAlt, caption: c.heroCaption }} fallbackAlt={c.name} className="absolute inset-0 h-full w-full object-cover opacity-60" />
         <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/60 to-charcoal/20" />
         <SquareCanvas className="pointer-events-none absolute inset-0 h-full w-full opacity-70" />
         <div className="relative mx-auto flex min-h-[85vh] max-w-[1400px] flex-col justify-end px-6 pb-20 pt-32 md:px-10">
@@ -208,9 +210,9 @@ function CategoryPage() {
                 className="group relative flex flex-col overflow-hidden border border-border bg-arch-white transition hover:border-dragon"
               >
                 <div className="relative aspect-[4/3] overflow-hidden bg-charcoal">
-                  <img
-                    src={m.image}
-                    alt={m.name}
+                  <FocalImage
+                    image={{ url: m.image, focal: m.imageFocal, alt: m.imageAlt }}
+                    fallbackAlt={m.name}
                     className="h-full w-full object-cover opacity-90 transition duration-700 group-hover:scale-105 group-hover:opacity-100"
                   />
                   <div className="absolute left-0 top-0 bg-dragon px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.25em] text-arch-white">
@@ -250,11 +252,17 @@ function CategoryPage() {
         <div className="mx-auto max-w-[1400px] px-6 md:px-10">
           <div className="section-eyebrow">Reference Fleet</div>
           <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-3">
-            {c.gallery.map((img, i) => (
-              <div key={i} className="relative overflow-hidden">
-                <img src={img} alt={`${c.name} reference ${i + 1}`} className="aspect-[4/3] w-full object-cover" />
-              </div>
-            ))}
+            {c.gallery.map((img, i) => {
+              const slide = resolveImage(img, `${c.name} reference ${i + 1}`);
+              return (
+                <figure key={i} className="relative">
+                  <div className="overflow-hidden">
+                    <FocalImage image={slide} fallbackAlt={`${c.name} reference ${i + 1}`} loading="lazy" className="aspect-[4/3] w-full object-cover" />
+                  </div>
+                  <ImageCaption text={slide.caption} />
+                </figure>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -298,7 +306,7 @@ function CategoryPage() {
                 className="group block overflow-hidden bg-arch-white"
               >
                 <div className="aspect-[4/3] overflow-hidden">
-                  <img src={o.hero} alt={o.name} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+                  <FocalImage image={{ url: o.hero, focal: o.heroFocal, alt: o.heroAlt }} fallbackAlt={o.name} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
                 </div>
                 <div className="p-4">
                   <div className="text-[10px] uppercase tracking-[0.3em] text-steel">Series {o.ref}</div>

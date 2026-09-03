@@ -6,6 +6,8 @@ import { CONTACT, toAbsoluteUrl, type Category } from "@/lib/site";
 import { getPublicCatalog } from "@/lib/catalog.functions";
 import { mergeCatalog } from "@/lib/catalog-merge";
 import { INDUSTRIES } from "@/lib/industries";
+import { FocalImage } from "@/components/FocalImage";
+import { resolveImage } from "@/lib/media";
 
 export const Route = createFileRoute("/machinery/$type")({
   loader: async ({ params }) => {
@@ -28,7 +30,8 @@ export const Route = createFileRoute("/machinery/$type")({
     const url = toAbsoluteUrl(`/machinery/${c.slug}`);
     const title = `${c.name} — Machinery Type Catalogue | QianTron`;
     const desc = `${c.tagline} ${c.intro}`.slice(0, 158);
-    const images = [c.hero, ...c.gallery];
+    const galleryUrls = c.gallery.map((g) => resolveImage(g).url).filter(Boolean);
+    const images = [c.hero, ...galleryUrls];
 
     const products = c.machines.map((m, i) => ({
       "@type": "ListItem" as const,
@@ -39,7 +42,7 @@ export const Route = createFileRoute("/machinery/$type")({
         sku: m.code,
         model: m.code,
         category: c.name,
-        image: [m.image, ...c.gallery.filter((g) => g !== m.image)],
+        image: [m.image, ...galleryUrls.filter((g) => g !== m.image)],
         description: `${m.name} — ${m.tag}. ${c.tagline}`,
         brand: { "@type": "Brand", name: m.name.split(" ")[0] },
         manufacturer: { "@type": "Organization", name: m.name.split(" ")[0] },
@@ -255,7 +258,7 @@ function MachineryTypePage() {
                 className="group flex flex-col overflow-hidden border border-border bg-arch-white transition hover:border-dragon"
               >
                 <div className="relative aspect-[4/3] overflow-hidden bg-charcoal">
-                  <img src={m.image} alt={m.name} className="h-full w-full object-cover opacity-90 transition duration-700 group-hover:scale-105" />
+                  <FocalImage image={{ url: m.image, focal: m.imageFocal, alt: m.imageAlt }} fallbackAlt={m.name} className="h-full w-full object-cover opacity-90 transition duration-700 group-hover:scale-105" />
                   <div className="absolute left-0 top-0 bg-dragon px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.25em] text-arch-white">
                     {m.code}
                   </div>
