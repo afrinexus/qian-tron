@@ -7,6 +7,7 @@ import { getPublicCatalog } from "@/lib/catalog.functions";
 import { mergeCatalog } from "@/lib/catalog-merge";
 import { INDUSTRIES } from "@/lib/industries";
 import { FocalImage } from "@/components/FocalImage";
+import { resolveImage } from "@/lib/media";
 
 export const Route = createFileRoute("/machinery/$type")({
   loader: async ({ params }) => {
@@ -29,7 +30,8 @@ export const Route = createFileRoute("/machinery/$type")({
     const url = toAbsoluteUrl(`/machinery/${c.slug}`);
     const title = `${c.name} — Machinery Type Catalogue | QianTron`;
     const desc = `${c.tagline} ${c.intro}`.slice(0, 158);
-    const images = [c.hero, ...c.gallery];
+    const galleryUrls = c.gallery.map((g) => resolveImage(g).url).filter(Boolean);
+    const images = [c.hero, ...galleryUrls];
 
     const products = c.machines.map((m, i) => ({
       "@type": "ListItem" as const,
@@ -40,7 +42,7 @@ export const Route = createFileRoute("/machinery/$type")({
         sku: m.code,
         model: m.code,
         category: c.name,
-        image: [m.image, ...c.gallery.filter((g) => g !== m.image)],
+        image: [m.image, ...galleryUrls.filter((g) => g !== m.image)],
         description: `${m.name} — ${m.tag}. ${c.tagline}`,
         brand: { "@type": "Brand", name: m.name.split(" ")[0] },
         manufacturer: { "@type": "Organization", name: m.name.split(" ")[0] },

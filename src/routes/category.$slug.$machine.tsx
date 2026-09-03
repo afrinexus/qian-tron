@@ -237,6 +237,7 @@ function MachinePage() {
                 {m.code}
               </div>
             </div>
+            <ImageCaption text={m.imageCaption ?? ""} />
           </div>
           <div className="md:col-span-5">
             <div className="section-eyebrow">Chapter I · Overview</div>
