@@ -1,4 +1,9 @@
-import { resolveImage, type GalleryItem, type ImageMeta } from "@/lib/media";
+import {
+  resolveImage,
+  responsiveImageSrcSet,
+  type GalleryItem,
+  type ImageMeta,
+} from "@/lib/media";
 
 /**
  * Image that honours a stored focal point so the subject stays framed in any
@@ -10,19 +15,28 @@ export function FocalImage({
   fallbackAlt = "",
   className = "",
   loading,
+  sizes = "100vw",
+  fetchPriority,
 }: {
   image: GalleryItem | ImageMeta | undefined | null;
   fallbackAlt?: string;
   className?: string;
   loading?: "lazy" | "eager";
+  sizes?: string;
+  fetchPriority?: "high" | "low" | "auto";
 }) {
   const meta = resolveImage(image as GalleryItem, fallbackAlt);
   if (!meta.url) return null;
+  const srcSet = responsiveImageSrcSet(meta.url);
   return (
     <img
       src={meta.url}
+      srcSet={srcSet}
+      sizes={srcSet ? sizes : undefined}
       alt={meta.alt || fallbackAlt}
       loading={loading}
+      decoding="async"
+      fetchPriority={fetchPriority}
       style={{ objectPosition: meta.focal }}
       className={className}
     />
