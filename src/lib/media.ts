@@ -57,6 +57,7 @@ export function resolveImage(input: GalleryItem | undefined | null, fallbackAlt 
 
 const STORAGE_PUBLIC_PATH = "/storage/v1/object/public/";
 const STORAGE_RENDER_PATH = "/storage/v1/render/image/public/";
+const BUNDLED_ASSET_ID = /\/__l5e\/assets-v1\/([0-9a-f-]{36})\//i;
 
 /**
  * Returns an on-demand, CDN-cached thumbnail URL for public catalogue-media
@@ -64,18 +65,25 @@ const STORAGE_RENDER_PATH = "/storage/v1/render/image/public/";
  * capabilities are not known.
  */
 export function responsiveImageUrl(url: string, width: number): string {
-  if (!url || !url.includes(STORAGE_PUBLIC_PATH)) return url;
-  const rendered = url.replace(STORAGE_PUBLIC_PATH, STORAGE_RENDER_PATH);
-  const separator = rendered.includes("?") ? "&" : "?";
-  return `${rendered}${separator}width=${Math.max(1, Math.round(width))}&quality=82`;
+  if (!url) return url;
+  const bundled = url.match(BUNDLED_ASSET_ID);
+  if (bundled?.[1]) return `/catalog-thumbs/${bundled[1]}-${Math.max(1, Math.round(width))}.webp`;
+  if (url.includes(STORAGE_PUBLIC_PATH)) {
+    const rendered = url.replace(STORAGE_PUBLIC_PATH, STORAGE_RENDER_PATH);
+    const separator = rendered.includes("?") ? "&" : "?";
+    return `${rendered}${separator}width=${Math.max(1, Math.round(width))}&quality=82`;
+  }
+  return url;
 }
 
 export function responsiveImageSrcSet(
   url: string,
   widths: readonly number[] = [320, 480, 640, 960, 1280, 1600, 1920],
 ): string | undefined {
-  if (!url.includes(STORAGE_PUBLIC_PATH)) return undefined;
-  return widths.map((width) => `${responsiveImageUrl(url, width)} ${width}w`).join(", ");
+  const isBundled = BUNDLED_ASSET_ID.test(url);
+  if (!isBundled && !url.includes(STORAGE_PUBLIC_PATH)) return undefined;
+  const candidates = isBundled ? widths.filter((width) => width <= 640) : widths;
+  return candidates.map((width) => `${responsiveImageUrl(url, width)} ${width}w`).join(", ");
 }
 
 /** Schema.org image metadata; unlike Open Graph, JSON-LD accepts ImageObject. */

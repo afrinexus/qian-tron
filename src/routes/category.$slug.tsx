@@ -38,7 +38,13 @@ export const Route = createFileRoute("/category/$slug")({
                   "@type": "Product",
                   name: m.name,
                   sku: m.code,
-                  image: [toSchemaImage({ url: m.image, alt: m.imageAlt, caption: m.imageCaption }, m.name, toAbsoluteUrl)].filter(Boolean),
+                  image: [
+                    toSchemaImage({ url: m.image, alt: m.imageAlt, caption: m.imageCaption }, m.name, toAbsoluteUrl),
+                    toSchemaImage({ url: c.hero, alt: c.heroAlt, caption: c.heroCaption }, c.name, toAbsoluteUrl),
+                    ...c.gallery.map((image, index) =>
+                      toSchemaImage(image, `${c.name} reference ${index + 1}`, toAbsoluteUrl),
+                    ),
+                  ].filter(Boolean),
                   category: c.name,
                   brand: { "@type": "Brand", name: "QianTron" },
                 },
