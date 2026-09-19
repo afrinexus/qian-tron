@@ -1,13 +1,13 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import type { Category } from "@/lib/site";
-import { CONTACT } from "@/lib/site";
+import { CONTACT, toAbsoluteUrl } from "@/lib/site";
 import { getPublicCatalog } from "@/lib/catalog.functions";
 import { mergeCatalog } from "@/lib/catalog-merge";
 import { SiteNav, SiteFooter } from "@/components/SiteChrome";
 import { SquareCanvas } from "@/components/SquareCanvas";
 import { FabricPattern } from "@/components/FabricPattern";
 import { FocalImage, ImageCaption } from "@/components/FocalImage";
-import { resolveImage } from "@/lib/media";
+import { resolveImage, toSchemaImage } from "@/lib/media";
 
 export const Route = createFileRoute("/category/$slug")({
   loader: async ({ params }) => {
@@ -38,7 +38,13 @@ export const Route = createFileRoute("/category/$slug")({
                   "@type": "Product",
                   name: m.name,
                   sku: m.code,
-                  image: m.image,
+                  image: [
+                    toSchemaImage({ url: m.image, alt: m.imageAlt, caption: m.imageCaption }, m.name, toAbsoluteUrl),
+                    toSchemaImage({ url: c.hero, alt: c.heroAlt, caption: c.heroCaption }, c.name, toAbsoluteUrl),
+                    ...c.gallery.map((image, index) =>
+                      toSchemaImage(image, `${c.name} reference ${index + 1}`, toAbsoluteUrl),
+                    ),
+                  ].filter(Boolean),
                   category: c.name,
                   brand: { "@type": "Brand", name: "QianTron" },
                 },
@@ -109,7 +115,7 @@ function CategoryPage() {
 
       {/* Hero */}
       <section className="relative min-h-[85vh] overflow-hidden bg-charcoal text-arch-white">
-        <FocalImage image={{ url: c.hero, focal: c.heroFocal, alt: c.heroAlt, caption: c.heroCaption }} fallbackAlt={c.name} className="absolute inset-0 h-full w-full object-cover opacity-60" />
+        <FocalImage image={{ url: c.hero, focal: c.heroFocal, alt: c.heroAlt, caption: c.heroCaption }} fallbackAlt={c.name} loading="eager" fetchPriority="high" sizes="100vw" className="absolute inset-0 h-full w-full object-cover opacity-60" />
         <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/60 to-charcoal/20" />
         <SquareCanvas className="pointer-events-none absolute inset-0 h-full w-full opacity-70" />
         <div className="relative mx-auto flex min-h-[85vh] max-w-[1400px] flex-col justify-end px-6 pb-20 pt-32 md:px-10">
@@ -213,6 +219,8 @@ function CategoryPage() {
                   <FocalImage
                     image={{ url: m.image, focal: m.imageFocal, alt: m.imageAlt }}
                     fallbackAlt={m.name}
+                    sizes="(min-width: 768px) 33vw, 100vw"
+                    loading="lazy"
                     className="h-full w-full object-cover opacity-90 transition duration-700 group-hover:scale-105 group-hover:opacity-100"
                   />
                   <div className="absolute left-0 top-0 bg-dragon px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.25em] text-arch-white">
@@ -257,7 +265,7 @@ function CategoryPage() {
               return (
                 <figure key={i} className="relative">
                   <div className="overflow-hidden">
-                    <FocalImage image={slide} fallbackAlt={`${c.name} reference ${i + 1}`} loading="lazy" className="aspect-[4/3] w-full object-cover" />
+                    <FocalImage image={slide} fallbackAlt={`${c.name} reference ${i + 1}`} loading="lazy" sizes="(min-width: 768px) 33vw, 100vw" className="aspect-[4/3] w-full object-cover" />
                   </div>
                   <ImageCaption text={slide.caption} />
                 </figure>
@@ -306,7 +314,7 @@ function CategoryPage() {
                 className="group block overflow-hidden bg-arch-white"
               >
                 <div className="aspect-[4/3] overflow-hidden">
-                  <FocalImage image={{ url: o.hero, focal: o.heroFocal, alt: o.heroAlt }} fallbackAlt={o.name} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+                  <FocalImage image={{ url: o.hero, focal: o.heroFocal, alt: o.heroAlt, caption: o.heroCaption }} fallbackAlt={o.name} loading="lazy" sizes="(min-width: 768px) 25vw, 50vw" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
                 </div>
                 <div className="p-4">
                   <div className="text-[10px] uppercase tracking-[0.3em] text-steel">Series {o.ref}</div>

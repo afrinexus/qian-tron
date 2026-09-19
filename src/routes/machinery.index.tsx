@@ -3,6 +3,7 @@ import { SiteNav, SiteFooter } from "@/components/SiteChrome";
 import { FabricPattern } from "@/components/FabricPattern";
 import { fabric } from "@/lib/fabric-presets";
 import { CATEGORIES } from "@/lib/site";
+import { FocalImage } from "@/components/FocalImage";
 
 const TITLE = "Machinery — Full Fleet Catalogue | QianTron";
 const DESC =
@@ -71,9 +72,11 @@ function MachineryPage() {
                 className="group relative overflow-hidden border border-border text-left transition hover:border-dragon"
               >
                 <div className="relative aspect-[4/5] overflow-hidden bg-charcoal">
-                  <img
-                    src={c.hero}
-                    alt={c.name}
+                  <FocalImage
+                    image={{ url: c.hero, focal: c.heroFocal, alt: c.heroAlt, caption: c.heroCaption }}
+                    fallbackAlt={c.name}
+                    loading="lazy"
+                    sizes="(min-width: 1024px) 14vw, (min-width: 640px) 25vw, 50vw"
                     className="h-full w-full object-cover opacity-70 transition duration-700 group-hover:scale-105 group-hover:opacity-95"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/40 to-transparent" />

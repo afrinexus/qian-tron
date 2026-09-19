@@ -7,7 +7,7 @@ import { getPublicCatalog } from "@/lib/catalog.functions";
 import { mergeCatalog } from "@/lib/catalog-merge";
 import { INDUSTRIES } from "@/lib/industries";
 import { FocalImage } from "@/components/FocalImage";
-import { resolveImage } from "@/lib/media";
+import { resolveImage, toSchemaImage } from "@/lib/media";
 
 export const Route = createFileRoute("/machinery/$type")({
   loader: async ({ params }) => {
@@ -30,8 +30,15 @@ export const Route = createFileRoute("/machinery/$type")({
     const url = toAbsoluteUrl(`/machinery/${c.slug}`);
     const title = `${c.name} — Machinery Type Catalogue | QianTron`;
     const desc = `${c.tagline} ${c.intro}`.slice(0, 158);
-    const galleryUrls = c.gallery.map((g) => resolveImage(g).url).filter(Boolean);
-    const images = [c.hero, ...galleryUrls];
+    const galleryImages = c.gallery
+      .map((g, i) => toSchemaImage(g, `${c.name} reference ${i + 1}`, toAbsoluteUrl))
+      .filter(Boolean);
+    const categoryImage = toSchemaImage(
+      { url: c.hero, alt: c.heroAlt, caption: c.heroCaption },
+      c.name,
+      toAbsoluteUrl,
+    );
+    const images = [categoryImage, ...galleryImages].filter(Boolean);
 
     const products = c.machines.map((m, i) => ({
       "@type": "ListItem" as const,
@@ -42,7 +49,10 @@ export const Route = createFileRoute("/machinery/$type")({
         sku: m.code,
         model: m.code,
         category: c.name,
-        image: [m.image, ...galleryUrls.filter((g) => g !== m.image)],
+        image: [
+          toSchemaImage({ url: m.image, alt: m.imageAlt, caption: m.imageCaption }, m.name, toAbsoluteUrl),
+          ...galleryImages,
+        ].filter(Boolean),
         description: `${m.name} — ${m.tag}. ${c.tagline}`,
         brand: { "@type": "Brand", name: m.name.split(" ")[0] },
         manufacturer: { "@type": "Organization", name: m.name.split(" ")[0] },
@@ -133,7 +143,7 @@ export const Route = createFileRoute("/machinery/$type")({
                 name: m.name,
                 sku: m.code,
                 model: m.code,
-                image: [m.image],
+                image: [toSchemaImage({ url: m.image, alt: m.imageAlt, caption: m.imageCaption }, m.name, toAbsoluteUrl)].filter(Boolean),
                 brand: { "@type": "Brand", name: m.name.split(" ")[0] },
                 additionalProperty: m.specs.map((s) => ({
                   "@type": "PropertyValue",
@@ -188,7 +198,7 @@ function MachineryTypePage() {
 
       {/* Hero */}
       <section className="relative min-h-[72vh] overflow-hidden bg-charcoal text-arch-white">
-        <img src={c.hero} alt={c.name} className="absolute inset-0 h-full w-full object-cover opacity-55" />
+        <FocalImage image={{ url: c.hero, focal: c.heroFocal, alt: c.heroAlt, caption: c.heroCaption }} fallbackAlt={c.name} loading="eager" fetchPriority="high" sizes="100vw" className="absolute inset-0 h-full w-full object-cover opacity-55" />
         <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/70 to-charcoal/25" />
         <FabricPattern className="absolute -bottom-24 -right-24 h-[560px] w-[560px]" {...fabric("hero-gold")} />
         <div className="relative mx-auto flex min-h-[72vh] max-w-[1400px] flex-col justify-end px-6 pb-16 pt-32 md:px-10">
@@ -258,7 +268,7 @@ function MachineryTypePage() {
                 className="group flex flex-col overflow-hidden border border-border bg-arch-white transition hover:border-dragon"
               >
                 <div className="relative aspect-[4/3] overflow-hidden bg-charcoal">
-                  <FocalImage image={{ url: m.image, focal: m.imageFocal, alt: m.imageAlt }} fallbackAlt={m.name} className="h-full w-full object-cover opacity-90 transition duration-700 group-hover:scale-105" />
+                  <FocalImage image={{ url: m.image, focal: m.imageFocal, alt: m.imageAlt, caption: m.imageCaption }} fallbackAlt={m.name} loading="lazy" sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="h-full w-full object-cover opacity-90 transition duration-700 group-hover:scale-105" />
                   <div className="absolute left-0 top-0 bg-dragon px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.25em] text-arch-white">
                     {m.code}
                   </div>

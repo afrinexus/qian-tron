@@ -7,6 +7,7 @@ import { SiteNav, SiteFooter } from "@/components/SiteChrome";
 import { SquareCanvas } from "@/components/SquareCanvas";
 import { FabricPattern } from "@/components/FabricPattern";
 import { FocalImage, ImageCaption } from "@/components/FocalImage";
+import { resolveImage, toSchemaImage } from "@/lib/media";
 
 const BASE_URL = "https://qian-tron.lovable.app";
 
@@ -43,7 +44,11 @@ export const Route = createFileRoute("/category/$slug/$machine")({
       mpn: m.code,
       productID: m.code,
       model: m.name,
-      image: [m.image, c.hero].filter(Boolean),
+      image: [
+        toSchemaImage({ url: m.image, alt: m.imageAlt, caption: m.imageCaption }, m.name, (value) => value.startsWith("http") ? value : `${BASE_URL}${value.startsWith("/") ? "" : "/"}${value}`),
+        toSchemaImage({ url: c.hero, alt: c.heroAlt, caption: c.heroCaption }, c.name, (value) => value.startsWith("http") ? value : `${BASE_URL}${value.startsWith("/") ? "" : "/"}${value}`),
+        ...c.gallery.map((image, index) => toSchemaImage(image, `${c.name} reference ${index + 1}`, (value) => value.startsWith("http") ? value : `${BASE_URL}${value.startsWith("/") ? "" : "/"}${value}`)),
+      ].filter(Boolean),
       description: desc,
       category: c.name,
       material: "Steel",
@@ -190,7 +195,7 @@ function MachinePage() {
 
       {/* Hero */}
       <section className="relative min-h-[80vh] overflow-hidden bg-charcoal text-arch-white">
-        <FocalImage image={{ url: m.image, focal: m.imageFocal, alt: m.imageAlt }} fallbackAlt={m.name} className="absolute inset-0 h-full w-full object-cover opacity-55" />
+        <FocalImage image={{ url: m.image, focal: m.imageFocal, alt: m.imageAlt, caption: m.imageCaption }} fallbackAlt={m.name} loading="eager" fetchPriority="high" sizes="100vw" className="absolute inset-0 h-full w-full object-cover opacity-55" />
         <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/70 to-charcoal/20" />
         <SquareCanvas className="pointer-events-none absolute inset-0 h-full w-full opacity-60" />
         <div className="relative mx-auto flex min-h-[80vh] max-w-[1400px] flex-col justify-end px-6 pb-20 pt-32 md:px-10">
@@ -232,7 +237,7 @@ function MachinePage() {
         <div className="relative mx-auto grid max-w-[1400px] grid-cols-1 gap-12 px-6 md:grid-cols-12 md:px-10">
           <div className="md:col-span-7">
             <div className="relative aspect-[4/3] overflow-hidden border border-border bg-concrete">
-              <FocalImage image={{ url: m.image, focal: m.imageFocal, alt: m.imageAlt }} fallbackAlt={m.name} className="h-full w-full object-cover" />
+              <FocalImage image={{ url: m.image, focal: m.imageFocal, alt: m.imageAlt, caption: m.imageCaption }} fallbackAlt={m.name} loading="lazy" sizes="(min-width: 768px) 58vw, 100vw" className="h-full w-full object-cover" />
               <div className="absolute left-0 top-0 bg-dragon px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.25em] text-arch-white">
                 {m.code}
               </div>
@@ -369,9 +374,11 @@ function MachinePage() {
                   className="group block overflow-hidden bg-arch-white"
                 >
                   <div className="aspect-[4/3] overflow-hidden">
-                    <img
-                      src={s.image}
-                      alt={s.name}
+                    <FocalImage
+                      image={resolveImage({ url: s.image, focal: s.imageFocal, alt: s.imageAlt, caption: s.imageCaption }, s.name)}
+                      fallbackAlt={s.name}
+                      loading="lazy"
+                      sizes="(min-width: 768px) 33vw, 100vw"
                       className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
                     />
                   </div>
